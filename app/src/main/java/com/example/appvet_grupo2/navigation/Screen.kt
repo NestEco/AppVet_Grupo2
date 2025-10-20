@@ -36,7 +36,7 @@ sealed class Screen(val route:String) {
     //Conexiones: Mascotas
     data object RegistrarMascotas : Screen("registrarMascota_page")
 
-    //Permite revisar las horas pedidas
+    //Permite revisar las horas agendadas
     //Conexiones: Home
     data object Agenda : Screen("agenda_page")
 

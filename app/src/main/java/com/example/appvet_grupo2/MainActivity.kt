@@ -15,8 +15,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.appvet_grupo2.navigation.NavigationEvent
 import com.example.appvet_grupo2.navigation.Screen
+import com.example.appvet_grupo2.ui.screens.AgendaScreen
+import com.example.appvet_grupo2.ui.screens.FechaScreen
 import com.example.appvet_grupo2.ui.screens.HomeScreen
+import com.example.appvet_grupo2.ui.screens.HoraScreen
 import com.example.appvet_grupo2.ui.screens.LoginScreen
+import com.example.appvet_grupo2.ui.screens.MascotasScreen
+import com.example.appvet_grupo2.ui.screens.PerfilScreen
+import com.example.appvet_grupo2.ui.screens.RegistrarMascotasScreen
+import com.example.appvet_grupo2.ui.screens.RegistroScreen
+import com.example.appvet_grupo2.ui.screens.ReservarScreen
 import com.example.appvet_grupo2.ui.theme.AppVet_Grupo2Theme
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -60,11 +68,35 @@ class MainActivity : ComponentActivity() {
                         startDestination = Screen.Login.route,
                         modifier = Modifier.padding(innerPadding)
                     ) {
+                        composable(route = Screen.Agenda.route) {
+                            AgendaScreen(navController = navController, viewModel = viewModel)
+                        }
+                        composable(route = Screen.SelectFecha.route) {
+                            FechaScreen(navController = navController, viewModel = viewModel)
+                        }
                         composable(route = Screen.Home.route) {
                             HomeScreen(navController = navController, viewModel = viewModel)
                         }
+                        composable(route = Screen.SelectHora.route) {
+                            HoraScreen(navController = navController, viewModel = viewModel)
+                        }
                         composable(route = Screen.Login.route) {
                             LoginScreen(navController = navController, viewModel = viewModel)
+                        }
+                        composable(route = Screen.Mascotas.route) {
+                            MascotasScreen(navController = navController, viewModel = viewModel)
+                        }
+                        composable(route = Screen.Perfil.route) {
+                            PerfilScreen(navController = navController, viewModel = viewModel)
+                        }
+                        composable(route = Screen.RegistrarMascotas.route) {
+                            RegistrarMascotasScreen(navController = navController, viewModel = viewModel)
+                        }
+                        composable(route = Screen.Registro.route) {
+                            RegistroScreen(navController = navController, viewModel = viewModel)
+                        }
+                        composable(route = Screen.ReservarHora.route) {
+                            ReservarScreen(navController = navController, viewModel = viewModel)
                         }
                     }
                 }

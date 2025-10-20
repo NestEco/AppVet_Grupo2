@@ -46,11 +46,35 @@ fun HomeScreen(
             ModalDrawerSheet {
                 Text("Menú", modifier = Modifier.padding(16.dp))
                 NavigationDrawerItem(
-                    label = { Text("Reservar Hora") },
+                    label = { Text("Perfil") },
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.ReservarHora)
+                        viewModel.navigateTo(Screen.Perfil)
+                    }
+                )
+                NavigationDrawerItem(
+                    label = { Text("Mascotas") },
+                    selected = false,
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        viewModel.navigateTo(Screen.Mascotas)
+                    }
+                )
+                NavigationDrawerItem(
+                    label = { Text("Horas Agendadas") },
+                    selected = false,
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        viewModel.navigateTo(Screen.Agenda)
+                    }
+                )
+                NavigationDrawerItem(
+                    label = { Text("Cerrar Sesión") },
+                    selected = false,
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        viewModel.navigateTo(Screen.Login)
                     }
                 )
             }
@@ -59,7 +83,7 @@ fun HomeScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("Pantalla Home")},
+                    title = { Text("Home")},
                     navigationIcon = {
                         IconButton(onClick = {
                             scope.launch { drawerState.open() }
@@ -77,10 +101,8 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text("¡Bienvenido a la página de Inicio (MVVM)!")
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { viewModel.navigateTo(Screen.Perfil)}) {
-                    Text("Ir a Configuración")
+                Button(onClick = { viewModel.navigateTo(Screen.ReservarHora)}) {
+                    Text("Reservar Hora")
                 }
             }
         }
