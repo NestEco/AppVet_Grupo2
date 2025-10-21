@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +28,7 @@ import androidx.navigation.NavHostController
 import com.example.appvet_grupo2.navigation.Screen
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
+import androidx.compose.ui.graphics.Color
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,8 +49,8 @@ fun RegistroScreen(
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
+                    containerColor = Color(0xFF00AB66),
+                    titleContentColor = Color.White,
                 ),
                 title={
                     Text("Registro de Usuario")
@@ -91,13 +93,15 @@ fun RegistroScreen(
                 Spacer(Modifier.height(8.dp))
             }
             Button(
-                onClick = {
-                    scope.launch { drawerState.close() }
-                    viewModel.navigateTo(Screen.Home)
-                },
-                modifier = Modifier.fillMaxWidth()
+                onClick = { scope.launch { drawerState.close() }
+                    viewModel.navigateTo(Screen.Home) },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF10C218), // Verde brillante
+                    contentColor = Color.White
+                )
             ) {
-                Text("Registrarse")
+                Text(text = "Registrarse")
             }
         }}
 }
