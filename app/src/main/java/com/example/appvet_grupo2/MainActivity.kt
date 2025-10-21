@@ -22,7 +22,7 @@ import com.example.appvet_grupo2.ui.screens.HoraScreen
 import com.example.appvet_grupo2.ui.screens.LoginScreen
 import com.example.appvet_grupo2.ui.screens.MascotasScreen
 import com.example.appvet_grupo2.ui.screens.PerfilScreen
-import com.example.appvet_grupo2.ui.screens.RegistrarMascotasScreen
+import com.example.appvet_grupo2.ui.screens.RegistrarMascotaScreen
 import com.example.appvet_grupo2.ui.screens.RegistroScreen
 import com.example.appvet_grupo2.ui.screens.ReservarScreen
 import com.example.appvet_grupo2.ui.theme.AppVet_Grupo2Theme
@@ -89,8 +89,8 @@ class MainActivity : ComponentActivity() {
                         composable(route = Screen.Perfil.route) {
                             PerfilScreen(navController = navController, viewModel = viewModel)
                         }
-                        composable(route = Screen.RegistrarMascotas.route) {
-                            RegistrarMascotasScreen(navController = navController, viewModel = viewModel)
+                        composable(Screen.RegistrarMascotas.route) {
+                            RegistrarMascotaScreen(navController, viewModel)
                         }
                         composable(route = Screen.Registro.route) {
                             RegistroScreen(navController = navController, viewModel = viewModel)
@@ -98,6 +98,7 @@ class MainActivity : ComponentActivity() {
                         composable(route = Screen.ReservarHora.route) {
                             ReservarScreen(navController = navController, viewModel = viewModel)
                         }
+
                     }
                 }
             }

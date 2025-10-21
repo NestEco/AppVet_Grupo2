@@ -47,6 +47,14 @@ fun HomeScreen(
             ModalDrawerSheet {
                 Text("Menú", modifier = Modifier.padding(16.dp))
                 NavigationDrawerItem(
+                    label = { Text("Home") },
+                    selected = false,
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        viewModel.navigateTo(Screen.Home)
+                    }
+                )
+                NavigationDrawerItem(
                     label = { Text("Perfil") },
                     selected = false,
                     onClick = {
