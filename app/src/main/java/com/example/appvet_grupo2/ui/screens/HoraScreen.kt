@@ -2,26 +2,36 @@ package com.example.appvet_grupo2.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.appvet_grupo2.navigation.Screen
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,20 +42,26 @@ fun HoraScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
+    // Estado para controlar la visibilidad del TimePicker
+    var showTimePicker by remember { mutableStateOf(false) }
+
+    // Estado para controlar la ventana de confirmación
+    var showSuccessDialog by remember { mutableStateOf(false) }
+
+    // Estado para almacenar la hora seleccionada
+    var selectedHour by remember { mutableStateOf<Int?>(null) }
+    var selectedMinute by remember { mutableStateOf<Int?>(null) }
+
+    // Estado del TimePicker con hora inicial (actual)
+    val currentTime = Calendar.getInstance()
+    val timePickerState = rememberTimePickerState(
+        initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
+        initialMinute = currentTime.get(Calendar.MINUTE),
+        is24Hour = true
+    )
+
     Scaffold(
-        // Barra superior de título
-        topBar = {
-            TopAppBar(
-                title = { Text("Seleccionar Hora")},
-                navigationIcon = {
-                    IconButton(onClick = {
-                        scope.launch { drawerState.open() }
-                    }) {
-                        Icon(Icons.Default.Menu, contentDescription = "Menú")
-                    }
-                }
-            )
-        }
+
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -54,8 +70,79 @@ fun HoraScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            //Aquí van los elementos de la página
+            // Botón para mostrar el TimePicker
+            OutlinedButton(
+                onClick = { showTimePicker = true }
+            ) {
+                Text("Seleccionar Hora")
+            }
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Mostrar la hora seleccionada
+            if (selectedHour != null && selectedMinute != null) {
+                val hourFormatted = String.format("%02d", selectedHour)
+                val minuteFormatted = String.format("%02d", selectedMinute)
+                Text("Hora seleccionada: $hourFormatted:$minuteFormatted")
+
+                //Botón continuar
+                Button(onClick = {
+                    showSuccessDialog = true
+                    viewModel.navigateTo(Screen.Agenda)
+                }) {
+                    Text("Continuar")
+                }
+            } else {
+                Text("No se ha seleccionado ninguna hora")
+            }
+        }
+
+        // TimePicker Dialog
+        if (showTimePicker) {
+            AlertDialog(
+                onDismissRequest = { showTimePicker = false },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            selectedHour = timePickerState.hour
+                            selectedMinute = timePickerState.minute
+                            showTimePicker = false
+                        }
+                    ) {
+                        Text("Confirmar")
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = { showTimePicker = false }
+                    ) {
+                        Text("Cancelar")
+                    }
+                },
+                text = {
+                    TimePicker(state = timePickerState)
+                }
+            )
+        }
+
+        // Ventana de confirmación de éxito
+        if (showSuccessDialog) {
+            AlertDialog(
+                onDismissRequest = { showSuccessDialog = false },
+                confirmButton = {
+                    TextButton(
+                        onClick = { showSuccessDialog = false }
+                    ) {
+                        Text("Aceptar")
+                    }
+                },
+                title = {
+                    Text("Éxito")
+                },
+                text = {
+                    Text("Hora agendada con éxito")
+                }
+            )
         }
     }
 }

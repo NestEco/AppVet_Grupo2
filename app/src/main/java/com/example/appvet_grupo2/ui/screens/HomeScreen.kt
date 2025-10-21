@@ -41,6 +41,7 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
 
     ModalNavigationDrawer(
+        //Drawer, barra lateral
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
@@ -80,6 +81,7 @@ fun HomeScreen(
             }
         }
     ) {
+
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -94,6 +96,7 @@ fun HomeScreen(
                 )
             }
         ) { innerPadding ->
+            //Parte principal
             Column(
                 modifier = Modifier
                     .padding(innerPadding)

@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.compose.material3:material3-window-size-class:1.4.0")
     implementation("androidx.navigation:navigation-compose:2.9.5")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4")
