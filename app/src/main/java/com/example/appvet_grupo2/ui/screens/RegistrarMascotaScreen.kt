@@ -39,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.chargemap.compose.numberpicker.NumberPicker
 import com.example.appvet_grupo2.model.Mascota
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 

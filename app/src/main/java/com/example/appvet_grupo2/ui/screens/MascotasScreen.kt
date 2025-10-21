@@ -122,7 +122,7 @@ fun MascotasScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        viewModel.navigateTo(Screen.RegistrarMascota)
+                        viewModel.navigateTo(Screen.RegistrarMascotas)
                     }
                 ) {
                     Row(
