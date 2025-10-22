@@ -49,10 +49,11 @@ fun ReservarScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            //Aquí sin importar cual se escoja, llevará a la pantalla FechaScreen, siendo la diferencia
-            //la variable que se almacena.
             Button(
-                onClick = { viewModel.navigateTo(Screen.SelectFecha) },
+                onClick = {
+                    viewModel.setTipoAgenda("Consulta")
+                    viewModel.navigateTo(Screen.SelectFecha)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
@@ -67,22 +68,10 @@ fun ReservarScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { viewModel.navigateTo(Screen.SelectFecha) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF00AB66),
-                contentColor = Color.White
-            )
-            ) {
-                Text("Vacunacion y Desparacitacion")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = { viewModel.navigateTo(Screen.SelectFecha) },
+                onClick = {
+                    viewModel.setTipoAgenda("Vacunación y Desparasitación")
+                    viewModel.navigateTo(Screen.SelectFecha)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
@@ -90,10 +79,26 @@ fun ReservarScreen(
                     containerColor = Color(0xFF00AB66),
                     contentColor = Color.White
                 )
-
-
             ) {
-                Text("Cirugia y Procesos Especializados")
+                Text("Vacunación y Desparasitación")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    viewModel.setTipoAgenda("Cirugía y Procesos Especializados")
+                    viewModel.navigateTo(Screen.SelectFecha)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF00AB66),
+                    contentColor = Color.White
+                )
+            ) {
+                Text("Cirugía y Procesos Especializados")
             }
         }
     }

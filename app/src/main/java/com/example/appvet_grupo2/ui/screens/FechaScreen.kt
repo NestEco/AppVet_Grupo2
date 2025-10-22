@@ -1,6 +1,5 @@
 package com.example.appvet_grupo2.ui.screens
 
-import android.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -44,13 +43,8 @@ fun FechaScreen(
 ){
     val scope = rememberCoroutineScope()
 
-    // Estado para controlar la visibilidad del DatePicker
     var showDatePicker by remember { mutableStateOf(false) }
-
-    // Estado para almacenar la fecha seleccionada
     var selectedDate by remember { mutableStateOf<Long?>(null) }
-
-    // Estado del DatePicker
     val datePickerState = rememberDatePickerState()
 
     Scaffold(
@@ -71,7 +65,11 @@ fun FechaScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Botón para mostrar el DatePicker
+            // Mostrar tipo de agenda seleccionado
+            Text("Tipo: ${viewModel.tipoAgendaTemp}")
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             OutlinedButton(
                 onClick = { showDatePicker = true }
             ) {
@@ -80,23 +78,24 @@ fun FechaScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Mostrar la fecha seleccionada
             if (selectedDate != null) {
                 val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 val dateString = formatter.format(Date(selectedDate!!))
                 Text("Fecha seleccionada: $dateString")
-                //Botón continuar
-                Button(onClick = { viewModel.navigateTo(Screen.SelectHora)}) {
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(onClick = {
+                    viewModel.setFecha(selectedDate!!)
+                    viewModel.navigateTo(Screen.SelectHora)
+                }) {
                     Text("Continuar")
                 }
             } else {
                 Text("No se ha seleccionado ninguna fecha")
             }
-
-
         }
 
-        // DatePicker bonito
         if (showDatePicker) {
             DatePickerDialog(
                 onDismissRequest = { showDatePicker = false },

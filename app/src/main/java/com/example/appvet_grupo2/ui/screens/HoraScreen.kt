@@ -34,7 +34,10 @@ import androidx.navigation.NavController
 import com.example.appvet_grupo2.navigation.Screen
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,17 +48,11 @@ fun HoraScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    // Estado para controlar la visibilidad del TimePicker
     var showTimePicker by remember { mutableStateOf(false) }
-
-    // Estado para controlar la ventana de confirmación
     var showSuccessDialog by remember { mutableStateOf(false) }
-
-    // Estado para almacenar la hora seleccionada
     var selectedHour by remember { mutableStateOf<Int?>(null) }
     var selectedMinute by remember { mutableStateOf<Int?>(null) }
 
-    // Estado del TimePicker con hora inicial (actual)
     val currentTime = Calendar.getInstance()
     val timePickerState = rememberTimePickerState(
         initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
@@ -70,12 +67,11 @@ fun HoraScreen(
                     containerColor = Color(0xFF00AB66),
                     titleContentColor = Color.White,
                 ),
-                title={
-                    Text("Seleccion de Hora")
+                title = {
+                    Text("Selección de Hora")
                 }
             )
         }
-
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -84,7 +80,19 @@ fun HoraScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Botón para mostrar el TimePicker
+            // Mostrar información de la agenda
+            Text("Tipo: ${viewModel.tipoAgendaTemp}")
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            if (viewModel.fechaTemp != null) {
+                val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val dateString = formatter.format(Date(viewModel.fechaTemp!!))
+                Text("Fecha: $dateString")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             OutlinedButton(
                 onClick = { showTimePicker = true }
             ) {
@@ -93,25 +101,25 @@ fun HoraScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Mostrar la hora seleccionada
             if (selectedHour != null && selectedMinute != null) {
                 val hourFormatted = String.format("%02d", selectedHour)
                 val minuteFormatted = String.format("%02d", selectedMinute)
                 Text("Hora seleccionada: $hourFormatted:$minuteFormatted")
 
-                //Botón continuar
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Button(onClick = {
+                    viewModel.setHora(selectedHour!!, selectedMinute!!)
+                    viewModel.agregarHoraAgendada()
                     showSuccessDialog = true
-                    viewModel.navigateTo(Screen.Agenda)
                 }) {
-                    Text("Continuar")
+                    Text("Confirmar Agenda")
                 }
             } else {
                 Text("No se ha seleccionado ninguna hora")
             }
         }
 
-        // TimePicker Dialog
         if (showTimePicker) {
             AlertDialog(
                 onDismissRequest = { showTimePicker = false },
@@ -139,13 +147,18 @@ fun HoraScreen(
             )
         }
 
-        // Ventana de confirmación de éxito
         if (showSuccessDialog) {
             AlertDialog(
-                onDismissRequest = { showSuccessDialog = false },
+                onDismissRequest = {
+                    showSuccessDialog = false
+                    viewModel.navigateTo(Screen.Agenda)
+                },
                 confirmButton = {
                     TextButton(
-                        onClick = { showSuccessDialog = false }
+                        onClick = {
+                            showSuccessDialog = false
+                            viewModel.navigateTo(Screen.Agenda)
+                        }
                     ) {
                         Text("Aceptar")
                     }
