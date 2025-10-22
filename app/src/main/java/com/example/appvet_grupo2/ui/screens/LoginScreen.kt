@@ -43,7 +43,6 @@ fun LoginScreen(
     val scope = rememberCoroutineScope()
 
     Scaffold(
-        //topBar = { TopAppBar(title = { Text("Nombre Veterinaria, alguna idea?")}) }
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -83,22 +82,21 @@ fun LoginScreen(
             }
             Button(
                 onClick = {
-                    scope.launch { drawerState.close() }
-                    viewModel.navigateTo(Screen.Home)
+                    // Navega directamente usando navController
+                    navController.navigate(Screen.Home.route)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF10C218),
                     contentColor = Color.White
                 )
-
             ) {
                 Text("Iniciar Sesión")
             }
             Spacer(Modifier.height(8.dp))
             TextButton(onClick = {
-                scope.launch { drawerState.close() }
-                viewModel.navigateTo(Screen.Registro)
+                // Navega directamente usando navController
+                navController.navigate(Screen.Registro.route)
             }) {
                 Text("¿No tienes cuenta? Regístrate Aquí")
             }

@@ -1,5 +1,6 @@
 package com.example.appvet_grupo2.ui.screens
 
+import android.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,7 +30,10 @@ import com.example.appvet_grupo2.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,6 +89,10 @@ fun HomeScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color(0xFF00AB66),
+                        titleContentColor = Color.White,
+                    ),
                     title = { Text("Home")},
                     navigationIcon = {
                         IconButton(onClick = {
@@ -104,9 +112,16 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Button(onClick = { viewModel.navigateTo(Screen.ReservarHora)}) {
+                Button(
+                    onClick = { viewModel.navigateTo(Screen.ReservarHora)},
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF10C218),
+                        contentColor = Color.White
+                    )) {
+
                     Text("Reservar Hora")
                 }
+                Text("Llevamos mas de 10 años comprometidos con la salud de sus mascotas,La experiencia de todos estos años nos ha llevado a liderar en la medicina veterinaria en la region")
             }
         }
     }
