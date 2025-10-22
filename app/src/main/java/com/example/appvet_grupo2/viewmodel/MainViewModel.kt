@@ -15,8 +15,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.example.appvet_grupo2.model.HoraAgendada
 import com.example.appvet_grupo2.model.Mascota
+import com.example.appvet_grupo2.model.UsuarioErrores
+import com.example.appvet_grupo2.model.UsuarioUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 
 class MainViewModel : ViewModel() {
+
+    // ---------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
+    //VALUES
     private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
 
     // Lista de mascotas
@@ -27,6 +36,11 @@ class MainViewModel : ViewModel() {
     private val _horasAgendadas = mutableStateListOf<HoraAgendada>()
     val horasAgendadas: List<HoraAgendada> = _horasAgendadas
 
+    val navigationEvents: SharedFlow<NavigationEvent> = _navigationEvents.asSharedFlow()
+
+    // ---------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
+    //VARIABLES
     // Datos temporales para crear una hora agendada
     var tipoAgendaTemp by mutableStateOf("")
         private set
@@ -36,6 +50,10 @@ class MainViewModel : ViewModel() {
         private set
     var minutoTemp by mutableStateOf<Int?>(null)
         private set
+
+    // ---------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------
+    //FUNCIONES
 
     // Funciones para mascotas
     fun agregarMascota(mascota: Mascota) {
@@ -76,8 +94,6 @@ class MainViewModel : ViewModel() {
         minutoTemp = null
     }
 
-    val navigationEvents: SharedFlow<NavigationEvent> = _navigationEvents.asSharedFlow()
-
     fun navigateTo(screen: Screen) {
         CoroutineScope(Dispatchers.Main).launch {
             _navigationEvents.emit(NavigationEvent.NavigateTo(route = screen))
@@ -95,6 +111,7 @@ class MainViewModel : ViewModel() {
             _navigationEvents.emit(NavigationEvent.NavigateUp)
         }
     }
+
 
 
 }
