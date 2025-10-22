@@ -32,11 +32,13 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -110,6 +112,10 @@ fun AgendaScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color(0xFF00AB66),
+                        titleContentColor = Color.White,
+                    ),
                     title = { Text("Horas Agendadas")},
                     navigationIcon = {
                         IconButton(onClick = {
@@ -128,10 +134,13 @@ fun AgendaScreen(
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 16.dp),
+
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+
                         Icon(Icons.Default.Add, contentDescription = "Agendar")
                         Spacer(modifier = Modifier.width(8.dp))
+
                         Text("Agendar")
                     }
                 }

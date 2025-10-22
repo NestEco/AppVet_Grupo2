@@ -87,7 +87,7 @@ fun LoginScreen(
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF10C218),
+                    containerColor = Color(0xFF00AB66),
                     contentColor = Color.White
                 )
             ) {

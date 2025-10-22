@@ -97,7 +97,7 @@ fun RegistroScreen(
                     viewModel.navigateTo(Screen.Home) },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF10C218), // Verde brillante
+                    containerColor = Color(0xFF00AB66), // Verde brillante
                     contentColor = Color.White
                 )
             ) {
