@@ -48,6 +48,8 @@ import com.example.appvet_grupo2.navigation.Screen
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
+//hotfix
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PerfilScreen(
