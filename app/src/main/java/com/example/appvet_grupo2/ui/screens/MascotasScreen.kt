@@ -48,7 +48,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.appvet_grupo2.model.Mascota
-import com.example.appvet_grupo2.navigation.Screen
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
@@ -71,7 +70,7 @@ fun MascotasScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Home)
+                        navController.navigate("Home")
                     }
                 )
                 NavigationDrawerItem(
@@ -79,7 +78,7 @@ fun MascotasScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Perfil)
+                        navController.navigate("perfil")
                     }
                 )
                 NavigationDrawerItem(
@@ -94,7 +93,7 @@ fun MascotasScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Agenda)
+                        navController.navigate("agenda")
                     }
                 )
                 NavigationDrawerItem(
@@ -102,7 +101,7 @@ fun MascotasScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Login)
+                        navController.navigate("login")
                     }
                 )
             }
@@ -128,7 +127,7 @@ fun MascotasScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        viewModel.navigateTo(Screen.RegistrarMascotas)
+                        navController.navigate("registrarMascota")
                     },
                     containerColor = Color(0xFF00AB66), // Color de fondo verde
                     contentColor = Color.White // Color del texto/ícono

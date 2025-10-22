@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.appvet_grupo2.navigation.Screen
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import androidx.compose.ui.graphics.Color
@@ -83,7 +82,7 @@ fun LoginScreen(
             Button(
                 onClick = {
                     // Navega directamente usando navController
-                    navController.navigate(Screen.Home.route)
+                    navController.navigate("home")
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
@@ -96,7 +95,7 @@ fun LoginScreen(
             Spacer(Modifier.height(8.dp))
             TextButton(onClick = {
                 // Navega directamente usando navController
-                navController.navigate(Screen.Registro.route)
+                navController.navigate("registro")
             }) {
                 Text("¿No tienes cuenta? Regístrate Aquí")
             }

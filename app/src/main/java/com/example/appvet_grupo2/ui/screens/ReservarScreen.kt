@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.appvet_grupo2.navigation.Screen
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +51,7 @@ fun ReservarScreen(
             Button(
                 onClick = {
                     viewModel.setTipoAgenda("Consulta")
-                    viewModel.navigateTo(Screen.SelectFecha)
+                    navController.navigate("fecha")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -70,7 +69,7 @@ fun ReservarScreen(
             Button(
                 onClick = {
                     viewModel.setTipoAgenda("Vacunación y Desparasitación")
-                    viewModel.navigateTo(Screen.SelectFecha)
+                    navController.navigate("fecha")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -88,7 +87,7 @@ fun ReservarScreen(
             Button(
                 onClick = {
                     viewModel.setTipoAgenda("Cirugía y Procesos Especializados")
-                    viewModel.navigateTo(Screen.SelectFecha)
+                    navController.navigate("fecha")
                 },
                 modifier = Modifier
                     .fillMaxWidth()

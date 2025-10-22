@@ -46,7 +46,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.appvet_grupo2.navigation.Screen
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
@@ -81,7 +80,7 @@ fun PerfilScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Home)
+                        navController.navigate("home")
                     }
                 )
                 NavigationDrawerItem(
@@ -89,7 +88,6 @@ fun PerfilScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Perfil)
                     }
                 )
                 NavigationDrawerItem(
@@ -97,7 +95,7 @@ fun PerfilScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Mascotas)
+                        navController.navigate("mascotas")
                     }
                 )
                 NavigationDrawerItem(
@@ -105,7 +103,7 @@ fun PerfilScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Agenda)
+                        navController.navigate("agenda")
                     }
                 )
                 NavigationDrawerItem(
@@ -113,7 +111,7 @@ fun PerfilScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Login)
+                        navController.navigate("login")
                     }
                 )
             }

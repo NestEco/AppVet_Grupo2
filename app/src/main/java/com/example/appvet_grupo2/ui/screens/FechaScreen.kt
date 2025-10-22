@@ -29,7 +29,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.appvet_grupo2.navigation.Screen
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -87,7 +86,7 @@ fun FechaScreen(
 
                 Button(onClick = {
                     viewModel.setFecha(selectedDate!!)
-                    viewModel.navigateTo(Screen.SelectHora)
+                    navController.navigate("hora")
                 }) {
                     Text("Continuar")
                 }

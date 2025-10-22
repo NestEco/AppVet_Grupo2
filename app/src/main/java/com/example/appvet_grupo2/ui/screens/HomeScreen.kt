@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.appvet_grupo2.navigation.Screen
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import androidx.compose.material.icons.Icons
@@ -55,7 +54,6 @@ fun HomeScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Home)
                     }
                 )
                 NavigationDrawerItem(
@@ -63,7 +61,7 @@ fun HomeScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Perfil)
+                        navController.navigate("perfil")
                     }
                 )
                 NavigationDrawerItem(
@@ -71,7 +69,7 @@ fun HomeScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Mascotas)
+                        navController.navigate("mascotas")
                     }
                 )
                 NavigationDrawerItem(
@@ -79,7 +77,7 @@ fun HomeScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Agenda)
+                        navController.navigate("agenda")
                     }
                 )
                 NavigationDrawerItem(
@@ -87,7 +85,7 @@ fun HomeScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Login)
+                        navController.navigate("login")
                     }
                 )
             }
@@ -121,7 +119,7 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 Button(
-                    onClick = { viewModel.navigateTo(Screen.ReservarHora)},
+                    onClick = { navController.navigate("reservarHora")},
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF00AB66),
                         contentColor = Color.White

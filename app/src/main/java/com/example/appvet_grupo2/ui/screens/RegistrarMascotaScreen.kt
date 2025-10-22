@@ -243,13 +243,13 @@ fun RegistrarMascotaScreen(
             AlertDialog(
                 onDismissRequest = {
                     showSuccessDialog = false
-                    navController.navigateUp()
+                    navController.navigate("mascotas")
                 },
                 confirmButton = {
                     TextButton(
                         onClick = {
                             showSuccessDialog = false
-                            navController.navigateUp()
+                            navController.navigate("mascotas")
                         }
                     ) {
                         Text("Aceptar")

@@ -45,7 +45,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.appvet_grupo2.model.HoraAgendada
-import com.example.appvet_grupo2.navigation.Screen
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -72,7 +71,7 @@ fun AgendaScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Home)
+                        navController.navigate("home")
                     }
                 )
                 NavigationDrawerItem(
@@ -80,7 +79,7 @@ fun AgendaScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Perfil)
+                        navController.navigate("perfil")
                     }
                 )
                 NavigationDrawerItem(
@@ -88,7 +87,7 @@ fun AgendaScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Mascotas)
+                        navController.navigate("mascotas")
                     }
                 )
                 NavigationDrawerItem(
@@ -103,7 +102,7 @@ fun AgendaScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        viewModel.navigateTo(Screen.Login)
+                        navController.navigate("login")
                     }
                 )
             }
@@ -129,7 +128,7 @@ fun AgendaScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        viewModel.navigateTo(Screen.ReservarHora)
+                        navController.navigate("reservarHora")
                     }
                 ) {
                     Row(

@@ -2,8 +2,6 @@ package com.example.appvet_grupo2.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
-import com.example.appvet_grupo2.navigation.NavigationEvent
-import com.example.appvet_grupo2.navigation.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -26,7 +24,6 @@ class MainViewModel : ViewModel() {
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
     //VALUES
-    private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
 
     // Lista de mascotas
     private val _mascotas = mutableStateListOf<Mascota>()
@@ -36,7 +33,6 @@ class MainViewModel : ViewModel() {
     private val _horasAgendadas = mutableStateListOf<HoraAgendada>()
     val horasAgendadas: List<HoraAgendada> = _horasAgendadas
 
-    val navigationEvents: SharedFlow<NavigationEvent> = _navigationEvents.asSharedFlow()
 
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
@@ -92,24 +88,6 @@ class MainViewModel : ViewModel() {
         fechaTemp = null
         horaTemp = null
         minutoTemp = null
-    }
-
-    fun navigateTo(screen: Screen) {
-        CoroutineScope(Dispatchers.Main).launch {
-            _navigationEvents.emit(NavigationEvent.NavigateTo(route = screen))
-        }
-    }
-
-    fun navigateBack() {
-        CoroutineScope(Dispatchers.Main).launch {
-            _navigationEvents.emit(NavigationEvent.PopBackStack)
-        }
-    }
-
-    fun navigateUp() {
-        CoroutineScope(Dispatchers.Main).launch {
-            _navigationEvents.emit(NavigationEvent.NavigateUp)
-        }
     }
 
 

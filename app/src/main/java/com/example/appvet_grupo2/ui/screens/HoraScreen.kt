@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.appvet_grupo2.navigation.Screen
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -151,13 +150,13 @@ fun HoraScreen(
             AlertDialog(
                 onDismissRequest = {
                     showSuccessDialog = false
-                    viewModel.navigateTo(Screen.Agenda)
+                    navController.navigate("agenda")
                 },
                 confirmButton = {
                     TextButton(
                         onClick = {
                             showSuccessDialog = false
-                            viewModel.navigateTo(Screen.Agenda)
+                            navController.navigate("agenda")
                         }
                     ) {
                         Text("Aceptar")

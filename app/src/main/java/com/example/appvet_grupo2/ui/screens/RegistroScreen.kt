@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.example.appvet_grupo2.navigation.Screen
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import androidx.compose.ui.graphics.Color
@@ -134,7 +133,7 @@ fun RegistroScreen(
             Button(
                 onClick = { scope.launch { drawerState.close() }
                     if (usviewModel.validaFormulario()) {
-                        navController.navigate(Screen.Registro.route)
+                        navController.navigate("home")
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),

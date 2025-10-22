@@ -15,8 +15,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.appvet_grupo2.navigation.AppNavigation
-import com.example.appvet_grupo2.navigation.NavigationEvent
-import com.example.appvet_grupo2.navigation.Screen
 import com.example.appvet_grupo2.ui.screens.AgendaScreen
 import com.example.appvet_grupo2.ui.screens.FechaScreen
 import com.example.appvet_grupo2.ui.screens.HomeScreen
@@ -41,65 +39,9 @@ class MainActivity : ComponentActivity() {
                 val viewModel: MainViewModel = viewModel()
                 val navController = rememberNavController()
 
-                LaunchedEffect(key1 = Unit) {
-                    viewModel.navigationEvents.collectLatest { event ->
-                        when (event) {
-                            is NavigationEvent.NavigateTo -> {
-                                navController.navigate(event.route.route) {
-                                    event.popUpToRoute?.let {
-                                        popUpTo(it.route) {
-                                            inclusive = event.inclusive
-                                        }
-                                    }
-                                    launchSingleTop = event.singleTop
-                                    restoreState = true
-                                }
-                            }
-
-                            is NavigationEvent.PopBackStack -> navController.popBackStack()
-                            is NavigationEvent.NavigateUp -> navController.navigateUp()
-                        }
-                    }
-                }
-
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
-
-                    NavHost(
-                        navController = navController,
-                        startDestination = Screen.Login.route,
-                        modifier = Modifier.padding(innerPadding)
-                    ) {
-                        composable(route = Screen.Agenda.route) {
-                            AgendaScreen(navController = navController, viewModel = viewModel)
-                        }
-                        composable(route = Screen.SelectFecha.route) {
-                            FechaScreen(navController = navController, viewModel = viewModel)
-                        }
-                        composable(route = Screen.Home.route) {
-                            HomeScreen(navController = navController, viewModel = viewModel)
-                        }
-                        composable(route = Screen.SelectHora.route) {
-                            HoraScreen(navController = navController, viewModel = viewModel)
-                        }
-                        composable(route = Screen.Login.route) {
-                            LoginScreen(navController = navController, viewModel = viewModel)
-                        }
-                        composable(route = Screen.Mascotas.route) {
-                            MascotasScreen(navController = navController, viewModel = viewModel)
-                        }
-                        composable(route = Screen.Perfil.route) {
-                            PerfilScreen(navController = navController, viewModel = viewModel)
-                        }
-                        composable(Screen.RegistrarMascotas.route) {
-                            RegistrarMascotaScreen(navController, viewModel)
-                        }
-                        composable(route = Screen.ReservarHora.route) {
-                            ReservarScreen(navController = navController, viewModel = viewModel)
-                        }
-
-                    }
                     Box(modifier = Modifier.padding(innerPadding)) {
                         AppNavigation()
                     }
