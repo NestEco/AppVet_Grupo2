@@ -9,9 +9,17 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.mutableStateListOf
+import com.example.appvet_grupo2.model.Mascota
 
 class MainViewModel : ViewModel() {
     private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
+    private val _mascotas = mutableStateListOf<Mascota>()
+    val mascotas: List<Mascota> = _mascotas
+
+    fun agregarMascota(mascota: Mascota) {
+        _mascotas.add(mascota)
+    }
 
     val navigationEvents: SharedFlow<NavigationEvent> = _navigationEvents.asSharedFlow()
 
