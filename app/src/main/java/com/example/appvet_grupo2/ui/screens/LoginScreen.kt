@@ -21,21 +21,19 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import com.example.appvet_grupo2.viewmodel.MainViewModel
-import kotlinx.coroutines.launch
 import androidx.compose.ui.graphics.Color
-
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.appvet_grupo2.data.AppState
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     navController: NavController,
-    viewModel: MainViewModel = viewModel()
+    appState: AppState
 ){
-    var usuario by remember { mutableStateOf("") }
+    var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var error by remember { mutableStateOf("") }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -48,7 +46,7 @@ fun LoginScreen(
                     containerColor = Color(0xFF00AB66),
                     titleContentColor = Color.White,
                 ),
-                title={
+                title = {
                     Text("Login")
                 }
             )
@@ -62,27 +60,52 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center
         ){
             OutlinedTextField(
-                value = usuario,
-                onValueChange = { usuario = it },
-                label = { Text("Usuario")},
-                modifier = Modifier.fillMaxWidth()
+                value = correo,
+                onValueChange = {
+                    correo = it
+                    error = "" // Limpiar error al escribir
+                },
+                label = { Text("Correo") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
             )
             Spacer(Modifier.height(8.dp))
+
             OutlinedTextField(
                 value = password,
-                onValueChange = { password = it },
-                label = { Text("Contraseña")},
-                modifier = Modifier.fillMaxWidth()
+                onValueChange = {
+                    password = it
+                    error = "" // Limpiar error al escribir
+                },
+                label = { Text("Contraseña") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
             )
             Spacer(Modifier.height(16.dp))
-            if(error.isNotEmpty()){
-                Text(error, color = MaterialTheme.colorScheme.error)
+
+            // Mostrar error si existe
+            if (error.isNotEmpty()) {
+                Text(
+                    text = error,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
                 Spacer(Modifier.height(8.dp))
             }
+
             Button(
                 onClick = {
-                    // Navega directamente usando navController
-                    navController.navigate("home")
+                    if (correo.isBlank() || password.isBlank()) {
+                        error = "Debe ingresar correo y contraseña"
+                    } else if (appState.login(correo, password)) {
+                        error = ""
+                        // Navegar a home y limpiar el stack
+                        navController.navigate("home") {
+                            popUpTo("login") { inclusive = true }
+                        }
+                    } else {
+                        error = "Correo y/o contraseña incorrectos"
+                    }
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
@@ -92,11 +115,14 @@ fun LoginScreen(
             ) {
                 Text("Iniciar Sesión")
             }
+
             Spacer(Modifier.height(8.dp))
-            TextButton(onClick = {
-                // Navega directamente usando navController
-                navController.navigate("registro")
-            }) {
+
+            TextButton(
+                onClick = {
+                    navController.navigate("registro")
+                }
+            ) {
                 Text("¿No tienes cuenta? Regístrate Aquí")
             }
         }

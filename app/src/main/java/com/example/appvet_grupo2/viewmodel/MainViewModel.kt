@@ -1,42 +1,20 @@
 package com.example.appvet_grupo2.viewmodel
 
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.launch
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import com.example.appvet_grupo2.data.AppState
 import com.example.appvet_grupo2.model.HoraAgendada
 import com.example.appvet_grupo2.model.Mascota
-import com.example.appvet_grupo2.model.UsuarioErrores
-import com.example.appvet_grupo2.model.UsuarioUiState
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 
-class MainViewModel : ViewModel() {
+class MainViewModel(val appState: AppState) : ViewModel() {
 
-    // ---------------------------------------------------------------------------------------------
-    // ---------------------------------------------------------------------------------------------
-    //VALUES
+    // Acceso a los datos desde AppState
+    val mascotas get() = appState.mascotas
+    val horasAgendadas get() = appState.horasAgendadas
+    val usuarioActual get() = appState.usuarioActual
 
-    // Lista de mascotas
-    private val _mascotas = mutableStateListOf<Mascota>()
-    val mascotas: List<Mascota> = _mascotas
-
-    // Lista de horas agendadas
-    private val _horasAgendadas = mutableStateListOf<HoraAgendada>()
-    val horasAgendadas: List<HoraAgendada> = _horasAgendadas
-
-
-    // ---------------------------------------------------------------------------------------------
-    // ---------------------------------------------------------------------------------------------
-    //VARIABLES
     // Datos temporales para crear una hora agendada
     var tipoAgendaTemp by mutableStateOf("")
         private set
@@ -47,16 +25,14 @@ class MainViewModel : ViewModel() {
     var minutoTemp by mutableStateOf<Int?>(null)
         private set
 
-    // ---------------------------------------------------------------------------------------------
-    // ---------------------------------------------------------------------------------------------
-    //FUNCIONES
+    // ========== FUNCIONES MASCOTAS ==========
 
-    // Funciones para mascotas
     fun agregarMascota(mascota: Mascota) {
-        _mascotas.add(mascota)
+        appState.agregarMascota(mascota)
     }
 
-    // Funciones para el flujo de agenda
+    // ========== FUNCIONES AGENDA ==========
+
     fun setTipoAgenda(tipo: String) {
         tipoAgendaTemp = tipo
     }
@@ -78,7 +54,7 @@ class MainViewModel : ViewModel() {
                 minuto = minutoTemp!!,
                 tipo = tipoAgendaTemp
             )
-            _horasAgendadas.add(nuevaHora)
+            appState.agregarHoraAgendada(nuevaHora)
             limpiarDatosTemporales()
         }
     }
@@ -89,7 +65,4 @@ class MainViewModel : ViewModel() {
         horaTemp = null
         minutoTemp = null
     }
-
-
-
 }

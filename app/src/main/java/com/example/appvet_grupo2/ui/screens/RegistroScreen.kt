@@ -1,6 +1,5 @@
 package com.example.appvet_grupo2.ui.screens
 
-import android.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,30 +24,24 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import com.example.appvet_grupo2.viewmodel.MainViewModel
-import kotlinx.coroutines.launch
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.appvet_grupo2.data.AppState
 import com.example.appvet_grupo2.viewmodel.UsuarioViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistroScreen(
     navController: NavController,
-    usviewModel: UsuarioViewModel
+    usviewModel: UsuarioViewModel,
+    appState: AppState
 ){
-
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var nombre by remember { mutableStateOf("") }
     var error by remember { mutableStateOf("") }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val estado by usviewModel.estado.collectAsState()
-
 
     Scaffold(
         topBar = {
@@ -57,7 +50,7 @@ fun RegistroScreen(
                     containerColor = Color(0xFF00AB66),
                     titleContentColor = Color.White,
                 ),
-                title={
+                title = {
                     Text("Registro de Usuario")
                 }
             )
@@ -71,11 +64,11 @@ fun RegistroScreen(
             verticalArrangement = Arrangement.Center
         ) {
 
-            //Nombre
+            // Nombre
             OutlinedTextField(
                 value = estado.nombre,
                 onValueChange = usviewModel::onNombreChange,
-                label = { Text("Nombre")},
+                label = { Text("Nombre") },
                 isError = estado.errores.nombre != null,
                 supportingText = {
                     estado.errores.nombre?.let {
@@ -86,11 +79,11 @@ fun RegistroScreen(
             )
             Spacer(Modifier.height(8.dp))
 
-            //Correo
+            // Correo
             OutlinedTextField(
                 value = estado.correo,
                 onValueChange = usviewModel::onCorreoChange,
-                label = { Text("Email")},
+                label = { Text("Email") },
                 isError = estado.errores.correo != null,
                 supportingText = {
                     estado.errores.correo?.let {
@@ -101,11 +94,11 @@ fun RegistroScreen(
             )
             Spacer(Modifier.height(8.dp))
 
-            //Clave
+            // Clave
             OutlinedTextField(
                 value = estado.clave,
                 onValueChange = usviewModel::onClaveChange,
-                label = { Text("Contraseña")},
+                label = { Text("Contraseña") },
                 isError = estado.errores.clave != null,
                 supportingText = {
                     estado.errores.clave?.let {
@@ -114,14 +107,16 @@ fun RegistroScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(16.dp))
 
-            if (error.isNotEmpty()){
+            // Mensaje de error general
+            if (error.isNotEmpty()) {
                 Text(error, color = MaterialTheme.colorScheme.error)
                 Spacer(Modifier.height(8.dp))
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically){
+            // Términos y condiciones
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
                     checked = estado.aceptaTerminos,
                     onCheckedChange = usviewModel::onAceptarTerminosChange
@@ -130,19 +125,65 @@ fun RegistroScreen(
                 Text("Acepto los términos y condiciones")
             }
 
+            Spacer(Modifier.height(16.dp))
+
+            // Botón de registro
             Button(
-                onClick = { scope.launch { drawerState.close() }
-                    if (usviewModel.validaFormulario()) {
-                        navController.navigate("home")
+                onClick = {
+                    // Primero validar el formulario
+                    if (!usviewModel.validaFormulario()) {
+                        error = "Por favor corrija los errores del formulario"
+                        return@Button
+                    }
+
+                    // Verificar términos
+                    if (!estado.aceptaTerminos) {
+                        error = "Debe aceptar los términos y condiciones"
+                        return@Button
+                    }
+
+                    // Intentar registrar en AppState
+                    val registrado = appState.registrarUsuario(
+                        nombre = estado.nombre,
+                        email = estado.correo,
+                        password = estado.clave
+                    )
+
+                    if (registrado) {
+                        // Registro exitoso
+                        error = ""
+                        usviewModel.limpiarFormulario()
+
+                        // Hacer login automático
+                        appState.login(estado.correo, estado.clave)
+
+                        // Navegar a home
+                        navController.navigate("home") {
+                            popUpTo("login") { inclusive = true }
+                        }
+                    } else {
+                        // Email ya existe
+                        error = "El correo ya está registrado"
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF00AB66), // Verde brillante
+                    containerColor = Color(0xFF00AB66),
                     contentColor = Color.White
-                )
+                ),
+                enabled = estado.aceptaTerminos // Botón habilitado solo si acepta términos
             ) {
                 Text(text = "Registrarse")
             }
-        }}
+
+            Spacer(Modifier.height(8.dp))
+
+            // Botón para volver al login
+            androidx.compose.material3.TextButton(
+                onClick = { navController.navigateUp() }
+            ) {
+                Text("¿Ya tienes cuenta? Inicia sesión")
+            }
+        }
+    }
 }

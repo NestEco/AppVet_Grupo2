@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.chargemap.compose.numberpicker.NumberPicker
+import com.example.appvet_grupo2.data.AppState
 import com.example.appvet_grupo2.model.Mascota
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 
@@ -49,7 +50,8 @@ import com.example.appvet_grupo2.viewmodel.MainViewModel
 @Composable
 fun RegistrarMascotaScreen(
     navController: NavController,
-    viewModel: MainViewModel = viewModel()
+    viewModel: MainViewModel = viewModel(),
+    appState: AppState
 ) {
     var nombre by remember { mutableStateOf("") }
     var edad by remember { mutableIntStateOf(1) }
