@@ -123,7 +123,7 @@ fun HomeScreen(
                 Button(
                     onClick = { viewModel.navigateTo(Screen.ReservarHora)},
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF10C218),
+                        containerColor = Color(0xFF00AB66),
                         contentColor = Color.White
                     )) {
 

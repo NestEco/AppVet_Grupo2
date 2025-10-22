@@ -34,12 +34,14 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -109,6 +111,10 @@ fun MascotasScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color(0xFF00AB66),
+                        titleContentColor = Color.White,
+                    ),
                     title = { Text("Mis Mascotas") },
                     navigationIcon = {
                         IconButton(onClick = {
@@ -123,7 +129,10 @@ fun MascotasScreen(
                 FloatingActionButton(
                     onClick = {
                         viewModel.navigateTo(Screen.RegistrarMascotas)
-                    }
+                    },
+                    containerColor = Color(0xFF00AB66), // Color de fondo verde
+                    contentColor = Color.White // Color del texto/ícono
+
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 16.dp),
@@ -132,6 +141,7 @@ fun MascotasScreen(
                         Icon(Icons.Default.Add, contentDescription = "Registrar")
                         Spacer(modifier = Modifier.width(8.dp))
                         Text("Registrar")
+
                     }
                 }
             }
