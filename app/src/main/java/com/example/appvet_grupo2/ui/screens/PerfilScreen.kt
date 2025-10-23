@@ -64,15 +64,15 @@ fun PerfilScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    // Cambiar a estado de Compose
+
     var noEditar by remember { mutableStateOf(true) }
 
-    // Estados para guardar los valores originales
+
     var nombreOriginal by remember { mutableStateOf(nombreUsuario) }
     var rolOriginal by remember { mutableStateOf(rol) }
 
     ModalNavigationDrawer(
-        //Drawer, barra lateral
+
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
@@ -138,7 +138,7 @@ fun PerfilScreen(
                 )
             }
         ) { innerPadding ->
-            //Parte principal
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -147,7 +147,7 @@ fun PerfilScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Foto de perfil
+
                 Box(
                     modifier = Modifier
                         .size(120.dp)
@@ -165,7 +165,7 @@ fun PerfilScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Botón para cambiar foto (opcional)
+
                 if (!noEditar) {
                     OutlinedButton(
                         onClick = {
@@ -205,7 +205,6 @@ fun PerfilScreen(
                             // Modo edición activado
                             noEditar = false
                         } else {
-                            // Guardar cambios y volver al estado inicial
                             nombreOriginal = nombreUsuario
                             rolOriginal = rol
                             noEditar = true
@@ -213,7 +212,7 @@ fun PerfilScreen(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF10C218),
+                        containerColor = Color(0xFF00AB66),
                         contentColor = Color.White
                     )
                 ) {

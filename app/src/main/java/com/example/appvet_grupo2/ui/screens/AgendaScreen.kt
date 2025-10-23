@@ -63,7 +63,7 @@ fun AgendaScreen(
     val scope = rememberCoroutineScope()
 
     ModalNavigationDrawer(
-        //Drawer, barra lateral
+
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
@@ -148,7 +148,7 @@ fun AgendaScreen(
             }
         ) { innerPadding ->
             if (viewModel.horasAgendadas.isEmpty()) {
-                // Mensaje cuando no hay horas agendadas
+
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -179,7 +179,7 @@ fun AgendaScreen(
                     }
                 }
             } else {
-                // Lista de horas agendadas
+
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -210,7 +210,7 @@ fun HoraAgendadaCard(horaAgendada: HoraAgendada) {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Ícono de calendario circular
+
             Box(
                 modifier = Modifier
                     .size(68.dp),
@@ -226,12 +226,12 @@ fun HoraAgendadaCard(horaAgendada: HoraAgendada) {
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Información de la hora agendada
+
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                // Tipo de agenda
+
                 Text(
                     text = horaAgendada.tipo,
                     fontSize = 18.sp,
@@ -241,7 +241,7 @@ fun HoraAgendadaCard(horaAgendada: HoraAgendada) {
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // Fecha
+
                 if (horaAgendada.fecha != null) {
                     val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                     val dateString = formatter.format(Date(horaAgendada.fecha))
@@ -254,7 +254,7 @@ fun HoraAgendadaCard(horaAgendada: HoraAgendada) {
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // Hora
+
                 val hourFormatted = String.format("%02d", horaAgendada.hora)
                 val minuteFormatted = String.format("%02d", horaAgendada.minuto)
                 Text(

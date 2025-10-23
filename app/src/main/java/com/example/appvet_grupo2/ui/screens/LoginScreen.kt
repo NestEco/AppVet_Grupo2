@@ -1,5 +1,6 @@
 package com.example.appvet_grupo2.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
@@ -22,17 +25,20 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.appvet_grupo2.R
 import com.example.appvet_grupo2.data.AppState
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.layout.Box
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     navController: NavController,
     appState: AppState
-){
+) {
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var error by remember { mutableStateOf("") }
@@ -47,7 +53,27 @@ fun LoginScreen(
                     titleContentColor = Color.White,
                 ),
                 title = {
-                    Text("Login")
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                    ) {
+
+                        Text(
+                            text = "Login",
+                            color = Color.White,
+                            modifier = Modifier.align(androidx.compose.ui.Alignment.CenterStart)
+                        )
+
+
+                        Image(
+                            painter = painterResource(id = R.drawable.logovet),
+                            contentDescription = "Logo",
+                            modifier = Modifier
+                                .size(60.dp)
+                                .align(androidx.compose.ui.Alignment.Center)
+                        )
+                    }
                 }
             )
         }
@@ -58,32 +84,33 @@ fun LoginScreen(
                 .padding(padding)
                 .padding(16.dp),
             verticalArrangement = Arrangement.Center
-        ){
+        ) {
             OutlinedTextField(
                 value = correo,
                 onValueChange = {
                     correo = it
-                    error = "" // Limpiar error al escribir
+                    error = ""
                 },
                 label = { Text("Correo") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
+
             Spacer(Modifier.height(8.dp))
 
             OutlinedTextField(
                 value = password,
                 onValueChange = {
                     password = it
-                    error = "" // Limpiar error al escribir
+                    error = ""
                 },
                 label = { Text("Contraseña") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
+
             Spacer(Modifier.height(16.dp))
 
-            // Mostrar error si existe
             if (error.isNotEmpty()) {
                 Text(
                     text = error,
@@ -99,7 +126,6 @@ fun LoginScreen(
                         error = "Debe ingresar correo y contraseña"
                     } else if (appState.login(correo, password)) {
                         error = ""
-                        // Navegar a home y limpiar el stack
                         navController.navigate("home") {
                             popUpTo("login") { inclusive = true }
                         }
@@ -118,11 +144,7 @@ fun LoginScreen(
 
             Spacer(Modifier.height(8.dp))
 
-            TextButton(
-                onClick = {
-                    navController.navigate("registro")
-                }
-            ) {
+            TextButton(onClick = { navController.navigate("registro") }) {
                 Text("¿No tienes cuenta? Regístrate Aquí")
             }
         }

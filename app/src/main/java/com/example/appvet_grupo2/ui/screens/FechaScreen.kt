@@ -66,7 +66,7 @@ fun FechaScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Mostrar tipo de agenda seleccionado
+
             Text("Tipo: ${viewModel.tipoAgendaTemp}")
 
             Spacer(modifier = Modifier.height(16.dp))

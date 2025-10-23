@@ -64,7 +64,7 @@ fun RegistroScreen(
             verticalArrangement = Arrangement.Center
         ) {
 
-            // Nombre
+
             OutlinedTextField(
                 value = estado.nombre,
                 onValueChange = usviewModel::onNombreChange,
@@ -79,7 +79,7 @@ fun RegistroScreen(
             )
             Spacer(Modifier.height(8.dp))
 
-            // Correo
+
             OutlinedTextField(
                 value = estado.correo,
                 onValueChange = usviewModel::onCorreoChange,
@@ -94,7 +94,7 @@ fun RegistroScreen(
             )
             Spacer(Modifier.height(8.dp))
 
-            // Clave
+
             OutlinedTextField(
                 value = estado.clave,
                 onValueChange = usviewModel::onClaveChange,
@@ -109,13 +109,13 @@ fun RegistroScreen(
             )
             Spacer(Modifier.height(16.dp))
 
-            // Mensaje de error general
+
             if (error.isNotEmpty()) {
                 Text(error, color = MaterialTheme.colorScheme.error)
                 Spacer(Modifier.height(8.dp))
             }
 
-            // Términos y condiciones
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
                     checked = estado.aceptaTerminos,
@@ -127,22 +127,22 @@ fun RegistroScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // Botón de registro
+
             Button(
                 onClick = {
-                    // Primero validar el formulario
+
                     if (!usviewModel.validaFormulario()) {
                         error = "Por favor corrija los errores del formulario"
                         return@Button
                     }
 
-                    // Verificar términos
+
                     if (!estado.aceptaTerminos) {
                         error = "Debe aceptar los términos y condiciones"
                         return@Button
                     }
 
-                    // Intentar registrar en AppState
+
                     val registrado = appState.registrarUsuario(
                         nombre = estado.nombre,
                         email = estado.correo,
@@ -150,19 +150,19 @@ fun RegistroScreen(
                     )
 
                     if (registrado) {
-                        // Registro exitoso
+
                         error = ""
                         usviewModel.limpiarFormulario()
 
-                        // Hacer login automático
+
                         appState.login(estado.correo, estado.clave)
 
-                        // Navegar a home
+
                         navController.navigate("home") {
                             popUpTo("login") { inclusive = true }
                         }
                     } else {
-                        // Email ya existe
+
                         error = "El correo ya está registrado"
                     }
                 },
@@ -178,7 +178,7 @@ fun RegistroScreen(
 
             Spacer(Modifier.height(8.dp))
 
-            // Botón para volver al login
+
             androidx.compose.material3.TextButton(
                 onClick = { navController.navigateUp() }
             ) {

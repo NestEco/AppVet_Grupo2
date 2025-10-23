@@ -81,7 +81,7 @@ fun HoraScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Mostrar información de la agenda
+
             Text("Tipo: ${viewModel.tipoAgendaTemp}")
 
             Spacer(modifier = Modifier.height(8.dp))

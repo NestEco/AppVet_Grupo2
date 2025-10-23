@@ -148,7 +148,7 @@ fun MascotasScreen(
             }
         ) { innerPadding ->
             if (viewModel.mascotas.isEmpty()) {
-                // Mensaje cuando no hay mascotas
+
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -179,7 +179,7 @@ fun MascotasScreen(
                     }
                 }
             } else {
-                // Lista de mascotas
+
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -211,7 +211,7 @@ fun MascotaCard(mascota: Mascota) {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Foto circular de la mascota
+
             Box(
                 modifier = Modifier
                     .size(68.dp)
@@ -229,7 +229,7 @@ fun MascotaCard(mascota: Mascota) {
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Información de la mascota
+
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.SpaceEvenly

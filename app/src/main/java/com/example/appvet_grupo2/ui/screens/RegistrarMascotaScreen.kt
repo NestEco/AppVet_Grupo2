@@ -86,7 +86,7 @@ fun RegistrarMascotaScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Foto de la mascota
+
             Box(
                 modifier = Modifier
                     .size(120.dp)
@@ -106,7 +106,7 @@ fun RegistrarMascotaScreen(
 
             OutlinedButton(
                 onClick = {
-                    // Aquí iría la lógica para seleccionar foto
+
                 }
             ) {
                 Text("Cambiar foto")
@@ -114,7 +114,7 @@ fun RegistrarMascotaScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Campo de nombre
+
             OutlinedTextField(
                 value = nombre,
                 onValueChange = { nombre = it },
@@ -125,7 +125,7 @@ fun RegistrarMascotaScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Selector de edad
+
             OutlinedTextField(
                 value = "$edad año${if (edad != 1) "s" else ""}",
                 onValueChange = { },
@@ -141,7 +141,7 @@ fun RegistrarMascotaScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Selector de especie
+
             OutlinedTextField(
                 value = especie,
                 onValueChange = { },
@@ -157,7 +157,7 @@ fun RegistrarMascotaScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Botón registrar
+
             Button(
                 onClick = {
                     if (nombre.isNotBlank()) {
@@ -177,7 +177,7 @@ fun RegistrarMascotaScreen(
             }
         }
 
-        // Dialog para seleccionar edad
+
         if (showEdadPicker) {
             AlertDialog(
                 onDismissRequest = { showEdadPicker = false },
@@ -207,7 +207,7 @@ fun RegistrarMascotaScreen(
             )
         }
 
-        // Dialog para seleccionar especie
+
         if (showEspeciePicker) {
             AlertDialog(
                 onDismissRequest = { showEspeciePicker = false },
@@ -240,7 +240,7 @@ fun RegistrarMascotaScreen(
             )
         }
 
-        // Dialog de éxito
+
         if (showSuccessDialog) {
             AlertDialog(
                 onDismissRequest = {
