@@ -18,7 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.appvet_grupo2.data.AppState
@@ -46,7 +49,7 @@ fun ReservarScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 32.dp),
+                .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -57,16 +60,20 @@ fun ReservarScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
+                    .height(70.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF00AB66),
                     contentColor = Color.White
                 )
             ) {
-                Text("Consulta")
+                Text(
+                    text = "Consulta",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium
+                )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             Button(
                 onClick = {
@@ -75,16 +82,22 @@ fun ReservarScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
+                    .height(70.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF00AB66),
                     contentColor = Color.White
                 )
             ) {
-                Text("Vacunación y Desparasitación")
+                Text(
+                    text = "Vacunación y Desparasitación",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center,
+                    lineHeight = 22.sp
+                )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             Button(
                 onClick = {
@@ -93,14 +106,22 @@ fun ReservarScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
+                    .height(70.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF00AB66),
                     contentColor = Color.White
                 )
             ) {
-                Text("Cirugía y Procesos Especializados")
+                Text(
+                    text = "Cirugía y Procesos Especializados",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center,
+                    lineHeight = 22.sp
+                )
             }
         }
     }
 }
+
+// quizas depues tengamos que cambiar algo

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
@@ -23,6 +22,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -58,20 +58,19 @@ fun LoginScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp)
                     ) {
-
                         Text(
                             text = "Login",
                             color = Color.White,
-                            modifier = Modifier.align(androidx.compose.ui.Alignment.CenterStart)
+                            modifier = Modifier.align(Alignment.CenterStart)
                         )
 
-
+                        // Logo centrado en el TopAppBar
                         Image(
                             painter = painterResource(id = R.drawable.logovet),
                             contentDescription = "Logo",
                             modifier = Modifier
                                 .size(60.dp)
-                                .align(androidx.compose.ui.Alignment.Center)
+                                .align(Alignment.Center)
                         )
                     }
                 }
@@ -83,8 +82,18 @@ fun LoginScreen(
                 .fillMaxSize()
                 .padding(padding)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Logo principal en el centro de la pantalla
+            Image(
+                painter = painterResource(id = R.drawable.logovetverde),
+                contentDescription = "Logo Principal",
+                modifier = Modifier
+                    .size(250.dp)
+                    .padding(bottom = 32.dp)
+            )
+
             OutlinedTextField(
                 value = correo,
                 onValueChange = {
@@ -150,3 +159,5 @@ fun LoginScreen(
         }
     }
 }
+
+// quizas depues tengamos que cambiar algo

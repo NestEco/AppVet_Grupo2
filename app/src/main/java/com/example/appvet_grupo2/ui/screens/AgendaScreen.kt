@@ -63,13 +63,17 @@ fun AgendaScreen(
     val scope = rememberCoroutineScope()
 
     ModalNavigationDrawer(
-
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                Text("Menú", modifier = Modifier.padding(16.dp))
+                Text(
+                    "Menú",
+                    modifier = Modifier.padding(16.dp),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
                 NavigationDrawerItem(
-                    label = { Text("Home") },
+                    label = { Text("Home", fontSize = 16.sp) },
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
@@ -77,7 +81,7 @@ fun AgendaScreen(
                     }
                 )
                 NavigationDrawerItem(
-                    label = { Text("Perfil") },
+                    label = { Text("Perfil", fontSize = 16.sp) },
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
@@ -85,7 +89,7 @@ fun AgendaScreen(
                     }
                 )
                 NavigationDrawerItem(
-                    label = { Text("Mascotas") },
+                    label = { Text("Mascotas", fontSize = 16.sp) },
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
@@ -93,14 +97,14 @@ fun AgendaScreen(
                     }
                 )
                 NavigationDrawerItem(
-                    label = { Text("Horas Agendadas") },
+                    label = { Text("Horas Agendadas", fontSize = 16.sp) },
                     selected = true,
                     onClick = {
                         scope.launch { drawerState.close() }
                     }
                 )
                 NavigationDrawerItem(
-                    label = { Text("Cerrar Sesión") },
+                    label = { Text("Cerrar Sesión", fontSize = 16.sp) },
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
@@ -117,7 +121,7 @@ fun AgendaScreen(
                         containerColor = Color(0xFF00AB66),
                         titleContentColor = Color.White,
                     ),
-                    title = { Text("Horas Agendadas")},
+                    title = { Text("Horas Agendadas", fontSize = 20.sp)},
                     navigationIcon = {
                         IconButton(onClick = {
                             scope.launch { drawerState.open() }
@@ -131,24 +135,23 @@ fun AgendaScreen(
                 FloatingActionButton(
                     onClick = {
                         navController.navigate("reservarHora")
-                    }
+                    },
+                    containerColor = Color(0xFF00AB66),
+                    contentColor = Color.White,
+                    shape = RoundedCornerShape(16.dp)
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 16.dp),
-
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-
                         Icon(Icons.Default.Add, contentDescription = "Agendar")
                         Spacer(modifier = Modifier.width(8.dp))
-
-                        Text("Agendar")
+                        Text("Agendar", fontSize = 16.sp, fontWeight = FontWeight.Medium)
                     }
                 }
             }
         ) { innerPadding ->
             if (viewModel.horasAgendadas.isEmpty()) {
-
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -167,25 +170,27 @@ fun AgendaScreen(
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
                             text = "No hay horas agendadas",
-                            style = MaterialTheme.typography.titleMedium,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "Presiona el botón Agendar para crear una",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 16.sp,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
                         )
                     }
                 }
             } else {
-
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
                         .padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(viewModel.horasAgendadas) { horaAgendada ->
                         HoraAgendadaCard(horaAgendada = horaAgendada)
@@ -201,68 +206,70 @@ fun HoraAgendadaCard(horaAgendada: HoraAgendada) {
     Card(
         modifier = Modifier
             .fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFFE8F5E9)
+        )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
+            // Ícono circular con fondo
             Box(
                 modifier = Modifier
-                    .size(68.dp),
+                    .size(60.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Default.CalendarToday,
                     contentDescription = "Hora agendada",
-                    modifier = Modifier.size(40.dp),
-                    tint = MaterialTheme.colorScheme.primary
+                    modifier = Modifier.size(36.dp),
+                    tint = Color(0xFF00AB66)
                 )
             }
 
             Spacer(modifier = Modifier.width(16.dp))
 
-
+            // Contenido de la card
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.SpaceEvenly
+                verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-
+                // Tipo de consulta
                 Text(
                     text = horaAgendada.tipo,
-                    fontSize = 18.sp,
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = Color(0xFF00AB66)
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
-
-
+                // Fecha
                 if (horaAgendada.fecha != null) {
                     val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                     val dateString = formatter.format(Date(horaAgendada.fecha))
                     Text(
                         text = "Fecha: $dateString",
-                        fontSize = 15.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                        fontSize = 16.sp,
+                        color = Color(0xFF424242)
                     )
                 }
 
-                Spacer(modifier = Modifier.height(4.dp))
-
-
+                // Hora
                 val hourFormatted = String.format("%02d", horaAgendada.hora)
                 val minuteFormatted = String.format("%02d", horaAgendada.minuto)
                 Text(
                     text = "Hora: $hourFormatted:$minuteFormatted",
-                    fontSize = 15.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color(0xFF424242)
                 )
             }
         }
     }
 }
+
+// quizas depues tengamos que cambiar algo
