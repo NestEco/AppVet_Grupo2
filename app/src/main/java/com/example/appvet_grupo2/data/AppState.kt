@@ -59,6 +59,30 @@ class AppState(private val dataStore: DataStoreManager) {
         usuarioActual = null
     }
 
+    fun actualizarFotoPerfil(fotoUri: String) {
+        usuarioActual?.let { usuario ->
+            val usuarioActualizado = usuario.copy(fotoPerfilUri = fotoUri)
+            val index = usuarios.indexOfFirst { it.id == usuario.id }
+            if (index != -1) {
+                usuarios[index] = usuarioActualizado
+                usuarioActual = usuarioActualizado
+                guardarUsuarios()
+            }
+        }
+    }
+
+    fun actualizarNombre(nuevoNombre: String) {
+        usuarioActual?.let { usuario ->
+            val usuarioActualizado = usuario.copy(nombre = nuevoNombre)
+            val index = usuarios.indexOfFirst { it.id == usuario.id }
+            if (index != -1) {
+                usuarios[index] = usuarioActualizado
+                usuarioActual = usuarioActualizado
+                guardarUsuarios()
+            }
+        }
+    }
+
 
     private fun guardarUsuarios() {
         scope.launch {
