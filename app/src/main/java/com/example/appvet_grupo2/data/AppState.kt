@@ -134,4 +134,9 @@ class AppState(private val dataStore: DataStoreManager) {
             dataStore.saveHorasAgendadas(horasAgendadas)
         }
     }
+
+    fun eliminarHoraAgendada(horaId: String) {
+        horasAgendadas.removeAll { it.id == horaId }
+        guardarHorasAgendadas()
+    }
 }
