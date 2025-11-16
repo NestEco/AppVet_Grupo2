@@ -3,11 +3,14 @@ package com.example.appvet_grupo2.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.appvet_grupo2.data.AppState
 import com.example.appvet_grupo2.ui.screens.AgendaScreen
+import com.example.appvet_grupo2.ui.screens.EditarMascotaScreen
 import com.example.appvet_grupo2.ui.screens.FechaScreen
 import com.example.appvet_grupo2.ui.screens.HomeScreen
 import com.example.appvet_grupo2.ui.screens.HoraScreen
@@ -88,5 +91,14 @@ fun AppNavigation(appState: AppState) {
         composable("agenda") {
             AgendaScreen(navController, mainViewModel, appState)
         }
+
+        composable(
+            route = "editarMascota/{mascotaId}",
+            arguments = listOf(navArgument("mascotaId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val mascotaId = backStackEntry.arguments?.getString("mascotaId") ?: ""
+            EditarMascotaScreen(navController, mascotaId, mainViewModel, appState)
+        }
+
     }
 }

@@ -1,6 +1,10 @@
 package com.example.appvet_grupo2.ui.screens
 
 import android.net.Uri
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,8 +24,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Pets
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
@@ -34,12 +41,21 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,6 +70,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.appvet_grupo2.data.AppState
 import com.example.appvet_grupo2.model.Mascota
 import com.example.appvet_grupo2.viewmodel.MainViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -188,12 +205,129 @@ fun MascotasScreen(
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    items(viewModel.mascotas) { mascota ->
-                        MascotaCard(mascota = mascota)
+                    items(
+                        items = viewModel.mascotas,
+                        key = { it.id }
+                    ) { mascota ->
+                        SwipeableMascotaCard(
+                            mascota = mascota,
+                            onEdit = {
+                                navController.navigate("editarMascota/${mascota.id}")
+                            },
+                            onDelete = { mascotaAEliminar ->
+                                appState.eliminarMascota(mascotaAEliminar.id)
+                            }
+                        )
                     }
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SwipeableMascotaCard(
+    mascota: Mascota,
+    onEdit: () -> Unit,
+    onDelete: (Mascota) -> Unit
+) {
+    var show by remember { mutableStateOf(true) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    val swipeState = rememberSwipeToDismissBoxState(
+        confirmValueChange = { value ->
+            when (value) {
+                SwipeToDismissBoxValue.EndToStart -> {
+                    // Deslizar hacia la izquierda - Eliminar
+                    showDeleteDialog = true
+                    false
+                }
+                SwipeToDismissBoxValue.StartToEnd -> {
+                    // Deslizar hacia la derecha - Editar
+                    onEdit()
+                    false
+                }
+                SwipeToDismissBoxValue.Settled -> false
+            }
+        },
+        positionalThreshold = { it * 0.25f }
+    )
+
+    AnimatedVisibility(
+        visible = show,
+        exit = shrinkVertically(
+            animationSpec = tween(durationMillis = 300)
+        ) + fadeOut()
+    ) {
+        SwipeToDismissBox(
+            state = swipeState,
+            enableDismissFromStartToEnd = true,
+            enableDismissFromEndToStart = true,
+            backgroundContent = {
+                val color = when (swipeState.targetValue) {
+                    SwipeToDismissBoxValue.StartToEnd -> Color(0xFF4CAF50) // Verde para editar
+                    SwipeToDismissBoxValue.EndToStart -> Color(0xFFE53935) // Rojo para eliminar
+                    else -> Color.Transparent
+                }
+
+                val icon = when (swipeState.targetValue) {
+                    SwipeToDismissBoxValue.StartToEnd -> Icons.Default.Edit
+                    SwipeToDismissBoxValue.EndToStart -> Icons.Default.Delete
+                    else -> null
+                }
+
+                val alignment = when (swipeState.targetValue) {
+                    SwipeToDismissBoxValue.StartToEnd -> Alignment.CenterStart
+                    SwipeToDismissBoxValue.EndToStart -> Alignment.CenterEnd
+                    else -> Alignment.Center
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color, RoundedCornerShape(12.dp))
+                        .padding(horizontal = 20.dp),
+                    contentAlignment = alignment
+                ) {
+                    icon?.let {
+                        Icon(
+                            imageVector = it,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
+                }
+            },
+            content = {
+                MascotaCard(mascota = mascota)
+            }
+        )
+    }
+
+    // Diálogo de confirmación para eliminar
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text("Eliminar mascota") },
+            text = { Text("¿Estás seguro de que deseas eliminar a ${mascota.nombre}?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        show = false
+                        showDeleteDialog = false
+                        onDelete(mascota)
+                    }
+                ) {
+                    Text("Eliminar", color = Color(0xFFE53935))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text("Cancelar")
+                }
+            }
+        )
     }
 }
 

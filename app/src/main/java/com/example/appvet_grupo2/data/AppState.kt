@@ -105,6 +105,19 @@ class AppState(private val dataStore: DataStoreManager) {
         }
     }
 
+    fun actualizarMascota(mascota: Mascota) {
+        val index = mascotas.indexOfFirst { it.id == mascota.id }
+        if (index != -1) {
+            mascotas[index] = mascota
+            guardarMascotas()
+        }
+    }
+
+    fun eliminarMascota(mascotaId: String) {
+        mascotas.removeAll { it.id == mascotaId }
+        guardarMascotas()
+    }
+
     private fun guardarMascotas() {
         scope.launch {
             dataStore.saveMascotas(mascotas)
