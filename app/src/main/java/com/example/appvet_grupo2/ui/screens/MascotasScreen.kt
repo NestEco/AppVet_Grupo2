@@ -1,5 +1,7 @@
 package com.example.appvet_grupo2.ui.screens
 
+import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,11 +44,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.appvet_grupo2.data.AppState
 import com.example.appvet_grupo2.model.Mascota
 import com.example.appvet_grupo2.viewmodel.MainViewModel
@@ -72,7 +76,7 @@ fun MascotasScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        navController.navigate("Home")
+                        navController.navigate("home")
                     }
                 )
                 NavigationDrawerItem(
@@ -103,6 +107,7 @@ fun MascotasScreen(
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
+                        appState.logout()
                         navController.navigate("login")
                     }
                 )
@@ -131,9 +136,8 @@ fun MascotasScreen(
                     onClick = {
                         navController.navigate("registrarMascota")
                     },
-                    containerColor = Color(0xFF00AB66), // Color de fondo verde
-                    contentColor = Color.White // Color del texto/ícono
-
+                    containerColor = Color(0xFF00AB66),
+                    contentColor = Color.White
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 16.dp),
@@ -142,13 +146,11 @@ fun MascotasScreen(
                         Icon(Icons.Default.Add, contentDescription = "Registrar")
                         Spacer(modifier = Modifier.width(8.dp))
                         Text("Registrar")
-
                     }
                 }
             }
         ) { innerPadding ->
             if (viewModel.mascotas.isEmpty()) {
-
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -179,7 +181,6 @@ fun MascotasScreen(
                     }
                 }
             } else {
-
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
@@ -211,7 +212,7 @@ fun MascotaCard(mascota: Mascota) {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
+            // Foto de la mascota o ícono por defecto
             Box(
                 modifier = Modifier
                     .size(68.dp)
@@ -219,17 +220,28 @@ fun MascotaCard(mascota: Mascota) {
                     .background(MaterialTheme.colorScheme.primaryContainer),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Default.Pets,
-                    contentDescription = "Foto de ${mascota.nombre}",
-                    modifier = Modifier.size(40.dp),
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+                if (mascota.fotoUri != null) {
+                    Image(
+                        painter = rememberAsyncImagePainter(Uri.parse(mascota.fotoUri)),
+                        contentDescription = "Foto de ${mascota.nombre}",
+                        modifier = Modifier
+                            .size(68.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.Pets,
+                        contentDescription = "Foto de ${mascota.nombre}",
+                        modifier = Modifier.size(40.dp),
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.width(16.dp))
 
-
+            // Información de la mascota
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.SpaceEvenly

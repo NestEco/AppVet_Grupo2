@@ -96,6 +96,14 @@ class AppState(private val dataStore: DataStoreManager) {
         guardarMascotas()
     }
 
+    fun actualizarFotoMascota(mascotaId: String, fotoUri: String) {
+        val index = mascotas.indexOfFirst { it.id == mascotaId }
+        if (index != -1) {
+            val mascotaActualizada = mascotas[index].copy(fotoUri = fotoUri)
+            mascotas[index] = mascotaActualizada
+            guardarMascotas()
+        }
+    }
 
     private fun guardarMascotas() {
         scope.launch {
