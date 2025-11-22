@@ -6,9 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.appvet_grupo2"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.appvet_grupo2"
@@ -42,6 +40,15 @@ android {
 }
 
 dependencies {
+    // Retrofit para peticiones HTTP
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    // Coil para cargar imágenes
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
     implementation("com.chargemap.compose:numberpicker:1.0.3")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.compose.material3:material3-window-size-class:1.4.0")
@@ -52,8 +59,6 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.7.5")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("com.google.code.gson:gson:2.11.0")
-    implementation("com.chargemap.compose:numberpicker:1.0.3")
-    implementation("io.coil-kt:coil-compose:2.5.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -63,11 +68,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-
-    //implementation(libs.androidx.navigation.runtime.android)
-    //La linea anterior no estaba funcionando a pesar de aparecer en la guía del aula.
-    //He implementado la siguiente línea con ayuda de la IA a modo de sustituto a las instrucciones
-    //de la guía.
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
 
     testImplementation(libs.junit)
