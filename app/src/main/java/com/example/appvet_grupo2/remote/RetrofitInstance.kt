@@ -7,17 +7,15 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
-    // IMPORTANTE: Cambia estas IPs según tu configuración
-    private const val BASE_URL_USUARIOS = "http://192.168.1.18:8080/api/"
-    private const val BASE_URL_MASCOTAS = "http://192.168.1.18:8081/api/"
-    private const val BASE_URL_HORAS = "http://192.168.1.18:8082/api/"
+    // URLs de AWS EC2
+    private const val BASE_URL_USUARIOS = "http://TU_IP_PUBLICA:8080/api/"
+    private const val BASE_URL_MASCOTAS = "http://TU_IP_PUBLICA:8081/api/"
+    private const val BASE_URL_HORAS = "http://TU_IP_PUBLICA:8082/api/"
 
-    // Logging interceptor
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
-    // Cliente HTTP
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .connectTimeout(30, TimeUnit.SECONDS)
@@ -25,7 +23,6 @@ object RetrofitInstance {
         .writeTimeout(30, TimeUnit.SECONDS)
         .build()
 
-    // Retrofit para Microservicio de Usuarios
     private val retrofitUsuarios: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL_USUARIOS)
@@ -34,7 +31,6 @@ object RetrofitInstance {
             .build()
     }
 
-    // Retrofit para Microservicio de Mascotas
     private val retrofitMascotas: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL_MASCOTAS)
@@ -43,7 +39,6 @@ object RetrofitInstance {
             .build()
     }
 
-    // Retrofit para Microservicio de Horas Agendadas
     private val retrofitHoras: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL_HORAS)
@@ -52,17 +47,14 @@ object RetrofitInstance {
             .build()
     }
 
-    // API de Usuarios
     val usuarioApi: UsuarioApiService by lazy {
         retrofitUsuarios.create(UsuarioApiService::class.java)
     }
 
-    // API de Mascotas
     val mascotaApi: MascotaApiService by lazy {
         retrofitMascotas.create(MascotaApiService::class.java)
     }
 
-    // API de Horas Agendadas
     val horaAgendadaApi: HoraAgendadaApiService by lazy {
         retrofitHoras.create(HoraAgendadaApiService::class.java)
     }
