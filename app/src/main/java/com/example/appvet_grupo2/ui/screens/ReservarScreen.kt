@@ -56,7 +56,7 @@ fun ReservarScreen(
             Button(
                 onClick = {
                     viewModel.setTipoAgenda("Consulta")
-                    navController.navigate("fecha")
+                    navController.navigate("seleccionarMascota")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -78,7 +78,7 @@ fun ReservarScreen(
             Button(
                 onClick = {
                     viewModel.setTipoAgenda("Vacunación y Desparasitación")
-                    navController.navigate("fecha")
+                    navController.navigate("seleccionarMascota")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -102,7 +102,7 @@ fun ReservarScreen(
             Button(
                 onClick = {
                     viewModel.setTipoAgenda("Cirugía y Procesos Especializados")
-                    navController.navigate("fecha")
+                    navController.navigate("seleccionarMascota")
                 },
                 modifier = Modifier
                     .fillMaxWidth()

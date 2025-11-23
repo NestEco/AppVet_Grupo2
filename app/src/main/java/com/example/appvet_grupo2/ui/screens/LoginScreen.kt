@@ -133,13 +133,18 @@ fun LoginScreen(
                 onClick = {
                     if (correo.isBlank() || password.isBlank()) {
                         error = "Debe ingresar correo y contraseña"
-                    } else if (appState.login(correo, password)) {
-                        error = ""
-                        navController.navigate("home") {
-                            popUpTo("login") { inclusive = true }
-                        }
                     } else {
-                        error = "Correo y/o contraseña incorrectos"
+                        // Usar callback para el login
+                        appState.login(correo, password) { success ->
+                            if (success) {
+                                error = ""
+                                navController.navigate("home") {
+                                    popUpTo("login") { inclusive = true }
+                                }
+                            } else {
+                                error = "Correo y/o contraseña incorrectos"
+                            }
+                        }
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),

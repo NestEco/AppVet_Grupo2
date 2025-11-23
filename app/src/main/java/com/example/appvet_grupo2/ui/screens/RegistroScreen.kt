@@ -130,40 +130,38 @@ fun RegistroScreen(
 
             Button(
                 onClick = {
-
+                    // Validar formulario
                     if (!usviewModel.validaFormulario()) {
                         error = "Por favor corrija los errores del formulario"
                         return@Button
                     }
-
 
                     if (!estado.aceptaTerminos) {
                         error = "Debe aceptar los términos y condiciones"
                         return@Button
                     }
 
-
-                    val registrado = appState.registrarUsuario(
+                    // Registrar usuario usando callback
+                    appState.registrarUsuario(
                         nombre = estado.nombre,
                         email = estado.correo,
                         password = estado.clave
-                    )
+                    ) { success, errorMessage ->
+                        if (success) {
+                            error = ""
+                            usviewModel.limpiarFormulario()
 
-                    if (registrado) {
-
-                        error = ""
-                        usviewModel.limpiarFormulario()
-
-
-                        appState.login(estado.correo, estado.clave)
-
-
-                        navController.navigate("home") {
-                            popUpTo("login") { inclusive = true }
+                            // Hacer login automáticamente
+                            appState.login(estado.correo, estado.clave) { loginSuccess ->
+                                if (loginSuccess) {
+                                    navController.navigate("home") {
+                                        popUpTo("login") { inclusive = true }
+                                    }
+                                }
+                            }
+                        } else {
+                            error = errorMessage ?: "Error al registrar usuario"
                         }
-                    } else {
-
-                        error = "El correo ya está registrado"
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -171,7 +169,7 @@ fun RegistroScreen(
                     containerColor = Color(0xFF00AB66),
                     contentColor = Color.White
                 ),
-                enabled = estado.aceptaTerminos // Botón habilitado solo si acepta términos
+                enabled = estado.aceptaTerminos
             ) {
                 Text(text = "Registrarse")
             }

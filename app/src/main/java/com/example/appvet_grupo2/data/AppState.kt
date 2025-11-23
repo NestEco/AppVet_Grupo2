@@ -29,16 +29,47 @@ class AppState(private val dataStore: DataStoreManager) {
 
     fun cargarDatos() {
         scope.launch {
-            // Cargar usuarios desde DataStore (local)
-            val users = dataStore.getUsers().first()
-            usuarios.clear()
-            usuarios.addAll(users)
+            // Cargar usuarios desde la API
+            cargarUsuariosDesdeApi()
 
             // Cargar mascotas desde la API
             cargarMascotasDesdeApi()
 
             // Cargar horas agendadas desde la API
             cargarHorasDesdeApi()
+        }
+    }
+
+    private suspend fun cargarUsuariosDesdeApi() {
+        try {
+            val response = RetrofitInstance.usuarioApi.obtenerTodos()
+            if (response.isSuccessful) {
+                response.body()?.let { usuariosApi ->
+                    withContext(Dispatchers.Main) {
+                        usuarios.clear()
+                        usuarios.addAll(usuariosApi)
+                    }
+                    // También guardar en DataStore como backup
+                    dataStore.saveUsers(usuariosApi)
+                    Log.d(TAG, "Usuarios cargados desde API: ${usuariosApi.size}")
+                }
+            } else {
+                Log.e(TAG, "Error al cargar usuarios: ${response.code()}")
+                // Fallback: cargar desde DataStore
+                val usuariosLocal = dataStore.getUsers().first()
+                withContext(Dispatchers.Main) {
+                    usuarios.clear()
+                    usuarios.addAll(usuariosLocal)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error de red al cargar usuarios: ${e.message}")
+            // Fallback: cargar desde DataStore
+            val usuariosLocal = dataStore.getUsers().first()
+            withContext(Dispatchers.Main) {
+                usuarios.clear()
+                usuarios.addAll(usuariosLocal)
+            }
         }
     }
 
@@ -55,7 +86,6 @@ class AppState(private val dataStore: DataStoreManager) {
                 }
             } else {
                 Log.e(TAG, "Error al cargar mascotas: ${response.code()}")
-                // Fallback: cargar desde DataStore si falla la API
                 val mascotasLocal = dataStore.getMascotas().first()
                 withContext(Dispatchers.Main) {
                     mascotas.clear()
@@ -64,7 +94,6 @@ class AppState(private val dataStore: DataStoreManager) {
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error de red al cargar mascotas: ${e.message}")
-            // Fallback: cargar desde DataStore
             val mascotasLocal = dataStore.getMascotas().first()
             withContext(Dispatchers.Main) {
                 mascotas.clear()
@@ -86,7 +115,6 @@ class AppState(private val dataStore: DataStoreManager) {
                 }
             } else {
                 Log.e(TAG, "Error al cargar horas: ${response.code()}")
-                // Fallback
                 val horasLocal = dataStore.getHorasAgendadas().first()
                 withContext(Dispatchers.Main) {
                     horasAgendadas.clear()
@@ -95,7 +123,6 @@ class AppState(private val dataStore: DataStoreManager) {
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error de red al cargar horas: ${e.message}")
-            // Fallback
             val horasLocal = dataStore.getHorasAgendadas().first()
             withContext(Dispatchers.Main) {
                 horasAgendadas.clear()
@@ -105,23 +132,98 @@ class AppState(private val dataStore: DataStoreManager) {
     }
 
     // ==========================================
-    // USUARIOS (DataStore - Local)
+    // USUARIOS (Retrofit - API)
     // ==========================================
 
-    fun registrarUsuario(nombre: String, email: String, password: String): Boolean {
-        if (usuarios.any { it.email == email }) return false
-        val nuevo = Usuario(nombre = nombre, email = email, password = password)
-        usuarios.add(nuevo)
-        guardarUsuarios()
-        return true
+    fun registrarUsuario(nombre: String, email: String, password: String, callback: (Boolean, String?) -> Unit) {
+        scope.launch {
+            try {
+                // Verificar si el email ya existe
+                if (usuarios.any { it.email == email }) {
+                    withContext(Dispatchers.Main) {
+                        callback(false, "El email ya está registrado")
+                    }
+                    return@launch
+                }
+
+                val nuevoUsuario = Usuario(
+                    nombre = nombre,
+                    email = email,
+                    password = password,
+                    rol = "Cliente"
+                )
+
+                val response = RetrofitInstance.usuarioApi.registrar(nuevoUsuario)
+                if (response.isSuccessful) {
+                    response.body()?.let { usuarioCreado ->
+                        withContext(Dispatchers.Main) {
+                            usuarios.add(usuarioCreado)
+                        }
+                        // También guardar en DataStore como backup
+                        dataStore.saveUsers(usuarios)
+                        Log.d(TAG, "Usuario registrado en API: ${usuarioCreado.email}")
+
+                        withContext(Dispatchers.Main) {
+                            callback(true, null)
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "Error al registrar usuario: ${response.code()}")
+                    withContext(Dispatchers.Main) {
+                        callback(false, "Error al registrar usuario")
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error de red al registrar usuario: ${e.message}")
+                withContext(Dispatchers.Main) {
+                    callback(false, "Error de conexión: ${e.message}")
+                }
+            }
+        }
     }
 
-    fun login(email: String, password: String): Boolean {
-        val user = usuarios.find { it.email == email && it.password == password }
-        return if (user != null) {
-            usuarioActual = user
-            true
-        } else false
+    fun login(email: String, password: String, callback: (Boolean) -> Unit) {
+        scope.launch {
+            try {
+                val credentials = mapOf(
+                    "email" to email,
+                    "password" to password
+                )
+
+                val response = RetrofitInstance.usuarioApi.login(credentials)
+                if (response.isSuccessful) {
+                    response.body()?.let { usuario ->
+                        withContext(Dispatchers.Main) {
+                            usuarioActual = usuario
+                            Log.d(TAG, "Login exitoso: ${usuario.nombre} - ID: ${usuario.id}")
+                            callback(true)
+                        }
+                    } ?: run {
+                        withContext(Dispatchers.Main) {
+                            callback(false)
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "Login fallido: ${response.code()}")
+                    withContext(Dispatchers.Main) {
+                        callback(false)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error de red en login: ${e.message}")
+                // Fallback: intentar login local
+                val user = usuarios.find { it.email == email && it.password == password }
+                withContext(Dispatchers.Main) {
+                    if (user != null) {
+                        usuarioActual = user
+                        Log.d(TAG, "Login local exitoso: ${user.nombre}")
+                        callback(true)
+                    } else {
+                        callback(false)
+                    }
+                }
+            }
+        }
     }
 
     fun logout() {
@@ -130,31 +232,55 @@ class AppState(private val dataStore: DataStoreManager) {
 
     fun actualizarFotoPerfil(fotoUri: String) {
         usuarioActual?.let { usuario ->
-            val usuarioActualizado = usuario.copy(fotoPerfilUri = fotoUri)
-            val index = usuarios.indexOfFirst { it.id == usuario.id }
-            if (index != -1) {
-                usuarios[index] = usuarioActualizado
-                usuarioActual = usuarioActualizado
-                guardarUsuarios()
+            scope.launch {
+                try {
+                    val usuarioActualizado = usuario.copy(fotoPerfilUri = fotoUri)
+                    val response = RetrofitInstance.usuarioApi.actualizar(usuario.id, usuarioActualizado)
+
+                    if (response.isSuccessful) {
+                        val index = usuarios.indexOfFirst { it.id == usuario.id }
+                        if (index != -1) {
+                            withContext(Dispatchers.Main) {
+                                usuarios[index] = usuarioActualizado
+                                usuarioActual = usuarioActualizado
+                            }
+                            dataStore.saveUsers(usuarios)
+                            Log.d(TAG, "Foto de perfil actualizada en API")
+                        }
+                    } else {
+                        Log.e(TAG, "Error al actualizar foto de perfil: ${response.code()}")
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error de red al actualizar foto: ${e.message}")
+                }
             }
         }
     }
 
     fun actualizarNombre(nuevoNombre: String) {
         usuarioActual?.let { usuario ->
-            val usuarioActualizado = usuario.copy(nombre = nuevoNombre)
-            val index = usuarios.indexOfFirst { it.id == usuario.id }
-            if (index != -1) {
-                usuarios[index] = usuarioActualizado
-                usuarioActual = usuarioActualizado
-                guardarUsuarios()
-            }
-        }
-    }
+            scope.launch {
+                try {
+                    val usuarioActualizado = usuario.copy(nombre = nuevoNombre)
+                    val response = RetrofitInstance.usuarioApi.actualizar(usuario.id, usuarioActualizado)
 
-    private fun guardarUsuarios() {
-        scope.launch {
-            dataStore.saveUsers(usuarios)
+                    if (response.isSuccessful) {
+                        val index = usuarios.indexOfFirst { it.id == usuario.id }
+                        if (index != -1) {
+                            withContext(Dispatchers.Main) {
+                                usuarios[index] = usuarioActualizado
+                                usuarioActual = usuarioActualizado
+                            }
+                            dataStore.saveUsers(usuarios)
+                            Log.d(TAG, "Nombre actualizado en API")
+                        }
+                    } else {
+                        Log.e(TAG, "Error al actualizar nombre: ${response.code()}")
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error de red al actualizar nombre: ${e.message}")
+                }
+            }
         }
     }
 
@@ -165,19 +291,19 @@ class AppState(private val dataStore: DataStoreManager) {
     fun agregarMascota(mascota: Mascota) {
         scope.launch {
             try {
+                Log.d(TAG, "Creando mascota - usuarioId: ${mascota.usuarioId}")
+
                 val response = RetrofitInstance.mascotaApi.crear(mascota)
                 if (response.isSuccessful) {
                     response.body()?.let { nuevaMascota ->
                         withContext(Dispatchers.Main) {
                             mascotas.add(nuevaMascota)
                         }
-                        // También guardar en DataStore como backup
                         dataStore.saveMascotas(mascotas)
                         Log.d(TAG, "Mascota creada en API: ${nuevaMascota.nombre}")
                     }
                 } else {
                     Log.e(TAG, "Error al crear mascota: ${response.code()}")
-                    // Fallback: guardar solo local
                     withContext(Dispatchers.Main) {
                         mascotas.add(mascota)
                     }
@@ -185,7 +311,6 @@ class AppState(private val dataStore: DataStoreManager) {
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error de red al crear mascota: ${e.message}")
-                // Fallback: guardar solo local
                 withContext(Dispatchers.Main) {
                     mascotas.add(mascota)
                 }
@@ -242,6 +367,13 @@ class AppState(private val dataStore: DataStoreManager) {
     fun agregarHoraAgendada(hora: HoraAgendada) {
         scope.launch {
             try {
+                Log.d(TAG, "=== CREANDO HORA AGENDADA ===")
+                Log.d(TAG, "Usuario ID: ${hora.usuarioId}")
+                Log.d(TAG, "Mascota ID: ${hora.mascotaId}")
+                Log.d(TAG, "Tipo: ${hora.tipo}")
+                Log.d(TAG, "Fecha: ${hora.fecha}")
+                Log.d(TAG, "Hora: ${hora.hora}:${hora.minuto}")
+
                 val response = RetrofitInstance.horaAgendadaApi.crear(hora)
                 if (response.isSuccessful) {
                     response.body()?.let { nuevaHora ->
@@ -253,7 +385,6 @@ class AppState(private val dataStore: DataStoreManager) {
                     }
                 } else {
                     Log.e(TAG, "Error al crear hora: ${response.code()}")
-                    // Fallback
                     withContext(Dispatchers.Main) {
                         horasAgendadas.add(hora)
                     }
@@ -261,7 +392,6 @@ class AppState(private val dataStore: DataStoreManager) {
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error de red al crear hora: ${e.message}")
-                // Fallback
                 withContext(Dispatchers.Main) {
                     horasAgendadas.add(hora)
                 }

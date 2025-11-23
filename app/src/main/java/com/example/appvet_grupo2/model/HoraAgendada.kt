@@ -5,5 +5,7 @@ data class HoraAgendada(
     val fecha: Long?,
     val hora: Int,
     val minuto: Int,
-    val tipo: String
+    val tipo: String,
+    val usuarioId: String,
+    val mascotaId: String? = null
 )

@@ -23,6 +23,7 @@ import com.example.appvet_grupo2.ui.screens.ReservarScreen
 import com.example.appvet_grupo2.viewmodel.MainViewModel
 import com.example.appvet_grupo2.viewmodel.MainViewModelFactory
 import com.example.appvet_grupo2.viewmodel.UsuarioViewModel
+import com.example.appvet_grupo2.ui.screens.SeleccionarMascotaScreen
 
 @Composable
 fun AppNavigation(appState: AppState) {
@@ -65,6 +66,10 @@ fun AppNavigation(appState: AppState) {
 
         composable("fecha") {
             FechaScreen(navController, mainViewModel, appState)
+        }
+
+        composable("seleccionarMascota") {
+            SeleccionarMascotaScreen(navController, mainViewModel, appState)
         }
 
 

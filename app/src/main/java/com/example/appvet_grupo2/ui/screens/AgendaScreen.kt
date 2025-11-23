@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -203,6 +204,7 @@ fun AgendaScreen(
                     ) { horaAgendada ->
                         SwipeableHoraAgendadaCard(
                             horaAgendada = horaAgendada,
+                            appState = appState,
                             onDelete = { horaAEliminar ->
                                 appState.eliminarHoraAgendada(horaAEliminar.id)
                             }
@@ -218,6 +220,7 @@ fun AgendaScreen(
 @Composable
 fun SwipeableHoraAgendadaCard(
     horaAgendada: HoraAgendada,
+    appState: AppState,
     onDelete: (HoraAgendada) -> Unit
 ) {
     var show by remember { mutableStateOf(true) }
@@ -276,7 +279,7 @@ fun SwipeableHoraAgendadaCard(
                 }
             },
             content = {
-                HoraAgendadaCard(horaAgendada = horaAgendada)
+                HoraAgendadaCard(horaAgendada = horaAgendada, appState = appState)
             }
         )
     }
@@ -308,7 +311,15 @@ fun SwipeableHoraAgendadaCard(
 }
 
 @Composable
-fun HoraAgendadaCard(horaAgendada: HoraAgendada) {
+fun HoraAgendadaCard(horaAgendada: HoraAgendada, appState: AppState) {
+    val mascota = remember(horaAgendada.mascotaId) {
+        appState.mascotas.find { it.id == horaAgendada.mascotaId }
+    }
+
+    val usuario = remember(horaAgendada.usuarioId) {
+        appState.usuarios.find { it.id == horaAgendada.usuarioId }
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -348,6 +359,26 @@ fun HoraAgendadaCard(horaAgendada: HoraAgendada) {
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
+
+                // Mostrar mascota
+                mascota?.let {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.Pets,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp),
+                            tint = Color(0xFF00AB66)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = it.nombre,
+                            fontSize = 15.sp,
+                            color = Color(0xFF00AB66),
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(4.dp))
+                }
 
                 if (horaAgendada.fecha != null) {
                     val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())

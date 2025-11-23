@@ -20,6 +20,8 @@ class MainViewModel(val appState: AppState) : ViewModel() {
         private set
     var fechaTemp by mutableStateOf<Long?>(null)
         private set
+    var mascotaIdTemp by mutableStateOf<String?>(null)  // NUEVO CAMPO
+        private set
     var horaTemp by mutableStateOf<Int?>(null)
         private set
     var minutoTemp by mutableStateOf<Int?>(null)
@@ -41,18 +43,26 @@ class MainViewModel(val appState: AppState) : ViewModel() {
         fechaTemp = fecha
     }
 
+    fun setMascota(mascotaId: String) {
+        mascotaIdTemp = mascotaId
+    }
+
     fun setHora(hora: Int, minuto: Int) {
         horaTemp = hora
         minutoTemp = minuto
     }
 
     fun agregarHoraAgendada() {
-        if (fechaTemp != null && horaTemp != null && minutoTemp != null && tipoAgendaTemp.isNotEmpty()) {
+        val usuarioId = appState.usuarioActual?.id
+
+        if (fechaTemp != null && horaTemp != null && minutoTemp != null && tipoAgendaTemp.isNotEmpty() && mascotaIdTemp != null && usuarioId != null) {
             val nuevaHora = HoraAgendada(
                 fecha = fechaTemp,
                 hora = horaTemp!!,
                 minuto = minutoTemp!!,
-                tipo = tipoAgendaTemp
+                tipo = tipoAgendaTemp,
+                usuarioId = usuarioId,
+                mascotaId = mascotaIdTemp
             )
             appState.agregarHoraAgendada(nuevaHora)
             limpiarDatosTemporales()
@@ -62,6 +72,7 @@ class MainViewModel(val appState: AppState) : ViewModel() {
     private fun limpiarDatosTemporales() {
         tipoAgendaTemp = ""
         fechaTemp = null
+        mascotaIdTemp = null
         horaTemp = null
         minutoTemp = null
     }

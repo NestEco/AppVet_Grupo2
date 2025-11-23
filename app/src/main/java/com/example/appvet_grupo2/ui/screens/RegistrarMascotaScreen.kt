@@ -3,6 +3,7 @@ package com.example.appvet_grupo2.ui.screens
 import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -239,11 +240,18 @@ fun RegistrarMascotaScreen(
             Button(
                 onClick = {
                     if (nombre.isNotBlank()) {
+                        // Logs para verificar errores, esto es temporal... en teoría
+                        Log.d("DEBUG_MASCOTA", "=== CREANDO MASCOTA ===")
+                        Log.d("DEBUG_MASCOTA", "Usuario actual: ${appState.usuarioActual?.id}")
+                        Log.d("DEBUG_MASCOTA", "Usuario nombre: ${appState.usuarioActual?.nombre}")
+                        Log.d("DEBUG_MASCOTA", "Nombre mascota: $nombre")
+
                         val nuevaMascota = Mascota(
                             nombre = nombre,
                             edad = edad,
                             especie = especie,
-                            fotoUri = fotoMascotaUri?.toString()
+                            fotoUri = fotoMascotaUri?.toString(),
+                            usuarioId = appState.usuarioActual?.id ?: ""
                         )
                         viewModel.agregarMascota(nuevaMascota)
                         showSuccessDialog = true

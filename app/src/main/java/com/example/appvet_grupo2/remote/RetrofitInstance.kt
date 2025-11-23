@@ -7,24 +7,32 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
-    // IMPORTANTE: Cambia esta IP según tu configuración
-    // - Para emulador Android: usa "10.0.2.2"
-    // - Para dispositivo físico: usa la IP de tu PC en la red local (ej: "192.168.1.100")
+    // IMPORTANTE: Cambia estas IPs según tu configuración
+    private const val BASE_URL_USUARIOS = "http://192.168.1.18:8080/api/"
     private const val BASE_URL_MASCOTAS = "http://192.168.1.18:8081/api/"
     private const val BASE_URL_HORAS = "http://192.168.1.18:8082/api/"
 
-    // Logging interceptor para ver las peticiones en Logcat
+    // Logging interceptor
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
-    // Cliente HTTP con timeouts y logging
+    // Cliente HTTP
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
         .build()
+
+    // Retrofit para Microservicio de Usuarios
+    private val retrofitUsuarios: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL_USUARIOS)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
 
     // Retrofit para Microservicio de Mascotas
     private val retrofitMascotas: Retrofit by lazy {
@@ -42,6 +50,11 @@ object RetrofitInstance {
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
+
+    // API de Usuarios
+    val usuarioApi: UsuarioApiService by lazy {
+        retrofitUsuarios.create(UsuarioApiService::class.java)
     }
 
     // API de Mascotas
