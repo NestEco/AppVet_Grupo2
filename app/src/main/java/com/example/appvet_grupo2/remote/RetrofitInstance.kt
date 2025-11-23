@@ -8,9 +8,9 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
     // URLs de AWS EC2
-    private const val BASE_URL_USUARIOS = "http://TU_IP_PUBLICA:8080/api/"
-    private const val BASE_URL_MASCOTAS = "http://TU_IP_PUBLICA:8081/api/"
-    private const val BASE_URL_HORAS = "http://TU_IP_PUBLICA:8082/api/"
+    private const val BASE_URL_USUARIOS = "http://44.197.251.42:8080/api/"
+    private const val BASE_URL_MASCOTAS = "http://44.197.251.42:8081/api/"
+    private const val BASE_URL_HORAS = "http://44.197.251.42:8082/api/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
