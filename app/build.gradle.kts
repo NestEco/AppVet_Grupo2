@@ -27,15 +27,29 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
+    }
+
+    // Configuración para pruebas unitarias
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
+            all {
+                it.useJUnitPlatform()
+            }
+        }
     }
 }
 
@@ -49,6 +63,7 @@ dependencies {
     // Coil para cargar imágenes
     implementation("io.coil-kt:coil-compose:2.5.0")
 
+    // Otras dependencias
     implementation("com.chargemap.compose:numberpicker:1.0.3")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.compose.material3:material3-window-size-class:1.4.0")
@@ -60,6 +75,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("com.google.code.gson:gson:2.11.0")
 
+    // Dependencias de Compose y AndroidX
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -70,11 +86,42 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
 
-    testImplementation(libs.junit)
+    // ==========================================
+    // PRUEBAS UNITARIAS
+    // ==========================================
+
+    // JUnit 5 (Jupiter)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.10.0")
+
+    // MockK para mocking en Kotlin
+    testImplementation("io.mockk:mockk:1.13.8")
+    testImplementation("io.mockk:mockk-android:1.13.8")
+
+    // Coroutines Test
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+    // Truth (assertions más expresivas) - Opcional pero recomendado
+    testImplementation("com.google.truth:truth:1.1.5")
+
+    // Turbine (para probar Flows) - Opcional
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+
+    // ==========================================
+    // PRUEBAS DE INSTRUMENTACIÓN
+    // ==========================================
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+
+    // ==========================================
+    // DEBUG
+    // ==========================================
+
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
