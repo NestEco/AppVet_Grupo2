@@ -82,6 +82,9 @@ fun MascotasScreen(
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val mascotasDelUsuario = remember(appState.mascotas, appState.usuarioActual) {
+        appState.mascotas.filter { it.usuarioId == appState.usuarioActual?.id }
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -167,7 +170,7 @@ fun MascotasScreen(
                 }
             }
         ) { innerPadding ->
-            if (viewModel.mascotas.isEmpty()) {
+            if (mascotasDelUsuario.isEmpty()) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -206,7 +209,7 @@ fun MascotasScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(
-                        items = viewModel.mascotas,
+                        items = mascotasDelUsuario,
                         key = { it.id }
                     ) { mascota ->
                         SwipeableMascotaCard(

@@ -78,6 +78,10 @@ fun AgendaScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
+    val horasDelUsuario = remember(appState.horasAgendadas, appState.usuarioActual) {
+        appState.horasAgendadas.filter { it.usuarioId == appState.usuarioActual?.id }
+    }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -160,7 +164,7 @@ fun AgendaScreen(
                 }
             }
         ) { innerPadding ->
-            if (viewModel.horasAgendadas.isEmpty()) {
+            if (horasDelUsuario.isEmpty()) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -199,7 +203,7 @@ fun AgendaScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(
-                        items = viewModel.horasAgendadas,
+                        items = horasDelUsuario,
                         key = { it.id }
                     ) { horaAgendada ->
                         SwipeableHoraAgendadaCard(
