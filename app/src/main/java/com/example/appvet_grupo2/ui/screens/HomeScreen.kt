@@ -46,6 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.platform.LocalContext
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.ui.layout.ContentScale
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -144,14 +145,26 @@ fun HomeScreen(
             }
         ) { innerPadding ->
 
+            // Box principal SIN padding para que la imagen llegue hasta arriba
             Box(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             ) {
+                // IMAGEN DE FONDO - Pegada directamente debajo del header
+                Image(
+                    painter = painterResource(id = R.drawable.fondito), // CAMBIA ESTE NOMBRE
+                    contentDescription = "Fondo",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = innerPadding.calculateTopPadding()), // Solo padding del top bar
+                    contentScale = ContentScale.FillWidth,
+                    alignment = Alignment.TopCenter // Alinea la imagen desde arriba
+                )
+
+                // CONTENIDO SOBRE LA IMAGEN
                 Column(
                     modifier = Modifier
-                        .fillMaxSize(),
+                        .fillMaxSize()
+                        .padding(innerPadding), // Aquí sí usamos el padding para el contenido
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -167,11 +180,13 @@ fun HomeScreen(
                     Text(
                         text = "Llevamos mas de 10 años comprometidos con la salud de sus mascotas. La experiencia de todos estos años nos ha llevado a liderar en la medicina veterinaria en la región",
                         modifier = Modifier.padding(horizontal = 32.dp),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        color = Color.White // Color blanco para que se vea sobre el fondo
                     )
                 }
 
 
+                // BOTÓN DE UBICACIÓN AL FONDO
                 Column(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
